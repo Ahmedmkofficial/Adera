@@ -15,9 +15,10 @@ def check_risk(
     db: Session = Depends(get_db),
 ):
     report_count = (
-        db.query(FraudReport)
-        .filter(FraudReport.recipient_phone == request.recipient_phone)
-        .count()
+    db.query(FraudReport.reporter_id)
+    .filter(FraudReport.recipient_phone == request.recipient_phone)
+    .distinct()
+    .count()
     )
 
     result = calculate_risk(
