@@ -1,343 +1,224 @@
-# Adera
+# ADERA
 
-Adera is a fraud-intelligence and recipient-risk prototype for digital payments.
+## Explainable Fraud Intelligence & Investigation Platform
 
-The system checks a payment recipient against available fraud intelligence, produces an explainable risk assessment, and provides an analyst interface for reviewing reports and alerts.
+Adera is a fraud-intelligence and investigation platform designed to detect and analyze suspicious digital-payment activity, especially **social-engineering and payment scams**.
 
-> **Important:** Adera is a prototype. It does not connect to CBE, Telebirr, real banks, real customer data, or real-money payment systems.
-
----
-
-# Project Structure
+Instead of only giving a transaction a risk score, Adera connects:
 
 ```text
-adera/
-│
-├── frontend/              # React frontend
-├── backend/               # FastAPI backend
-│   ├── api/
-│   ├── auth/
-│   ├── database/
-│   ├── models/
-│   ├── schemas/
-│   ├── services/
-│   └── tests/
-│
-├── data/                  # Synthetic fraud/scam data
-├── tests/                 # Integration/security tests
-├── docs/                  # Project documentation
-│
-├── docker-compose.yml
-├── requirements.txt
-├── .env.example
-└── README.md
+Payment Activity
+       ↓
+Fraud Intelligence
+       ↓
+Entities & Relationships
+       ↓
+Risk Analysis
+       ↓
+Alert
+       ↓
+Investigation
+       ↓
+Case
+       ↓
+Analyst Decision
 ```
+
+The project is a **university proof of concept** using synthetic data and a simulated payment environment.
+
+It does not connect to real banks, real payment providers, or real customer accounts.
 
 ---
 
-# Team Branches
+# 1. Project Goal
 
-Everyone works in the same GitHub repository.
+The goal of Adera is to demonstrate how fraud intelligence can help identify suspicious recipients and payment activity before or during a simulated transaction.
+
+Adera focuses on:
+
+* Social-engineering scams
+* Recipient risk
+* Fraud reports
+* Connected entities
+* Suspicious relationships
+* Explainable risk scoring
+* Fraud alerts
+* Analyst investigations
+* Fraud cases
+* Analyst decisions
+
+The project is inspired by concepts used in modern fraud-management and investigation platforms, but is intentionally much smaller and designed for a university MVP.
+
+---
+
+# 2. Main Workflow
+
+The core Adera workflow is:
 
 ```text
-main
-  │
-  └── develop
-       │
-       ├── feature/threat-intelligence
-       ├── feature/risk-engine
-       ├── feature/database
-       ├── feature/backend
-       ├── feature/frontend
-       └── feature/backend-testing
+User initiates payment
+        ↓
+Recipient identified
+        ↓
+Fraud intelligence retrieved
+        ↓
+Related entities and relationships checked
+        ↓
+Risk Engine evaluates signals
+        ↓
+Risk Assessment generated
+        ↓
+Alert created if necessary
+        ↓
+Analyst investigates
+        ↓
+Case created
+        ↓
+Analyst records decision
 ```
 
-## Branch assignments
+Possible analyst decisions:
 
-| Member   | Branch                        | Main responsibility                        |
-| -------- | ----------------------------- | ------------------------------------------ |
-| Member 1 | `feature/threat-intelligence` | Scam intelligence and synthetic fraud data |
-| Member 2 | `feature/risk-engine`         | Risk scoring and explanations              |
-| Member 3 | `feature/database`            | PostgreSQL database and models             |
-| Member 4 | `feature/backend`             | FastAPI backend and API                    |
-| Member 5 | `feature/frontend`            | React frontend                             |
-| Member 6 | `feature/backend-testing`     | Testing, security and backend support      |
-
-Do not work directly on `main`.
-
-Completed work should go through a Pull Request into `develop`.
-
----
-
-# Backend Setup
-
-## Requirements
-
-Install:
-
-* Python 3
-* PostgreSQL
-* Node.js and npm
-* Git
-
----
-
-## 1. Clone the repository
-
-```bash
-git clone https://github.com/Ahmedmkofficial/adera.git
-cd adera
+```text
+FRAUD
+FALSE_POSITIVE
+NEEDS_MORE_INFORMATION
 ```
 
 ---
 
-## 2. Create the Python virtual environment
+# 3. Main Features
 
-```bash
-python3 -m venv backend/.venv
-source backend/.venv/bin/activate
+## Customer Payment Interface
+
+The user can simulate a payment by entering:
+
+```text
+Recipient
+Amount
 ```
 
----
+Adera checks the recipient and displays:
 
-## 3. Install backend dependencies
-
-```bash
-pip install -r requirements.txt
+```text
+Risk Score
+Risk Level
+Risk Reasons
+Recommendation
 ```
-
----
-
-# PostgreSQL Setup
-
-Create a PostgreSQL user and database for local development.
 
 Example:
 
 ```text
-Database: adera_db
-User: adera_user
-```
+Risk Score: 82/100
 
-The exact password is local to each developer.
+Level: CRITICAL
 
----
+Reasons:
+• Multiple independent fraud reports
+• Recent fraud reports
+• Previous scam cases
+• Suspicious account relationship
+• Repeated scam pattern
 
-# Environment Configuration
-
-Create a `.env` file in the project root:
-
-```env
-DATABASE_URL=postgresql://adera_user:your_password@localhost:5432/adera_db
-```
-
-Do not commit `.env`.
-
-Use `.env.example` as the template.
-
----
-
-# Database Migrations
-
-After configuring PostgreSQL:
-
-```bash
-alembic upgrade head
-```
-
-To check whether the database schema matches the models:
-
-```bash
-alembic check
+Recommendation:
+STOP_AND_VERIFY
 ```
 
 ---
 
-# Start the Backend
+## Fraud Reporting
 
-From the project root:
+Users can report suspicious recipients.
 
-```bash
-source backend/.venv/bin/activate
-uvicorn backend.main:app --reload
-```
-
-The API will be available at:
+A report contains information such as:
 
 ```text
-http://127.0.0.1:8000
+Recipient
+Scam Type
+Description
+Reporter
+Timestamp
 ```
 
-Swagger API documentation:
+A report is treated as an **observation**, not automatic proof that someone is committing fraud.
+
+Multiple independent reports and supporting evidence can increase confidence.
+
+---
+
+## Fraud Intelligence
+
+Adera connects information from multiple sources, including:
 
 ```text
-http://127.0.0.1:8000/docs
+Fraud Reports
+Transactions
+Scam Cases
+Risk Assessments
+Account Relationships
+Historical Activity
 ```
 
-Health check:
+This allows analysts to investigate connections instead of looking at isolated transactions.
+
+---
+
+## Entity Relationships
+
+Adera represents relationships between accounts.
+
+Example:
 
 ```text
-http://127.0.0.1:8000/health
+Account A
+    │
+    ├── SHARED_PHONE ──→ Account B
+    │
+    ├── TRANSACTION ──→ Account C
+    │
+    └── RELATED_ACCOUNT ──→ Account D
 ```
 
-Expected response:
+Relationships are stored in PostgreSQL.
 
-```json
-{
-  "status": "ok"
-}
-```
+The frontend can display these relationships as a graph.
 
 ---
 
-# Current API
+## Risk Engine
 
-## Risk
+Adera uses an explainable rule-based Risk Engine for the MVP.
+
+Example signals include:
 
 ```text
-POST /risk/check
+Multiple independent reports
+Recent reports
+Previous scam cases
+Suspicious relationships
+Repeated scam patterns
+Unusual transaction behavior
 ```
 
-Example request:
-
-```json
-{
-  "recipient_phone": "0912345678",
-  "amount": 5000
-}
-```
-
----
-
-## Fraud Reports
+Initial scoring model:
 
 ```text
-POST /reports
+Multiple independent reports       +20
+Recent reports                     +15
+Previous scam case                 +25
+Suspicious relationship            +15
+Repeated scam pattern              +10
+Unusual transaction behavior       +10
 ```
 
----
-
-## Payment Simulation
+The final score is capped at:
 
 ```text
-POST /transactions/simulate
+100
 ```
 
----
-
-## Admin
-
-```text
-GET /admin/reports
-GET /admin/high-risk
-GET /admin/alerts
-```
-
-The admin endpoints are currently basic development endpoints. Authentication and authorization will be developed further as part of the project.
-
----
-
-# Frontend Setup
-
-Open another terminal.
-
-From the project root:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Vite will provide the local frontend address in the terminal.
-
----
-
-# Development Workflow
-
-Before starting new work:
-
-```bash
-git checkout develop
-git pull origin develop
-```
-
-Then switch to your assigned feature branch:
-
-```bash
-git checkout feature/your-branch
-```
-
-Work on your assigned feature.
-
-Check your changes:
-
-```bash
-git status
-```
-
-Commit:
-
-```bash
-git add .
-git commit -m "Describe your change"
-```
-
-Push:
-
-```bash
-git push origin feature/your-branch
-```
-
-Then open a Pull Request:
-
-```text
-feature/your-branch → develop
-```
-
----
-
-# Pull Request Rules
-
-Before opening a Pull Request:
-
-1. Test your changes.
-2. Make sure the application still starts.
-3. Keep commits focused.
-4. Explain what you changed.
-5. Mention anything another teammate needs to know.
-
-Do not directly push to `main`.
-
-The `main` branch is reserved for the stable project.
-
----
-
-# Working in Parallel
-
-The team should use mock data when another component is not ready.
-
-For example, the frontend can temporarily use:
-
-```json
-{
-  "score": 82,
-  "level": "CRITICAL",
-  "recommendation": "STOP_AND_VERIFY",
-  "reasons": [
-    "Multiple users reported this recipient",
-    "Recent fraud reports exist"
-  ]
-}
-```
-
-This allows frontend, backend, database and risk-engine development to happen simultaneously.
-
----
-
-# Risk Levels
-
-The current MVP uses:
+Risk levels:
 
 ```text
 0–24     LOW
@@ -346,75 +227,712 @@ The current MVP uses:
 75–100   CRITICAL
 ```
 
-The risk engine should provide an explanation for its result rather than returning only a number.
+Recommendations:
+
+```text
+LOW         → ALLOW
+MODERATE    → REVIEW
+HIGH        → VERIFY
+CRITICAL    → STOP_AND_VERIFY
+```
+
+These are initial engineering rules for the prototype and are not claims of real-world fraud accuracy.
+
+---
+
+# 4. Example Risk Input
+
+The Risk Engine can receive information such as:
+
+```python
+risk_input = {
+    "transaction_amount": 5000,
+    "independent_reports": 7,
+    "recent_reports": 3,
+    "previous_scam_cases": 2,
+    "suspicious_relationships": 1,
+    "repeated_scam_pattern": True,
+    "unusual_transaction": True
+}
+```
+
+Example output:
+
+```python
+{
+    "score": 82,
+    "level": "CRITICAL",
+    "recommendation": "STOP_AND_VERIFY",
+    "reasons": [
+        "Multiple independent fraud reports",
+        "Recent fraud reports exist",
+        "Previous scam case exists",
+        "Suspicious account relationship detected",
+        "Repeated scam pattern detected",
+        "Unusual transaction behavior detected"
+    ]
+}
+```
+
+The system explains **why** the risk assessment was produced.
+
+---
+
+# 5. Investigation Center
+
+Adera includes an analyst interface for investigating suspicious activity.
+
+An analyst can view:
+
+```text
+Alerts
+Recipients
+Accounts
+Transactions
+Fraud Reports
+Scam Cases
+Risk History
+Related Accounts
+Relationships
+```
+
+The investigation process is:
+
+```text
+Alert
+  ↓
+Entity Profile
+  ↓
+Relationships
+  ↓
+Evidence
+  ↓
+Case
+  ↓
+Analyst Decision
+```
+
+The purpose is to demonstrate how connected fraud information can support an investigation.
+
+---
+
+# 6. Database
+
+Adera uses:
+
+**PostgreSQL**
+
+Main entities:
+
+```text
+users
+accounts
+transactions
+fraud_reports
+scam_cases
+account_relationships
+risk_assessments
+alerts
+```
+
+Important relationship table:
+
+```text
+account_relationships
+```
 
 Example:
 
 ```text
-Score: 55
-Level: HIGH
-
-Reasons:
-- Multiple independent fraud reports
-- Related scam cases detected
+id
+source_account_id
+target_account_id
+relationship_type
+created_at
 ```
 
----
-
-# Important MVP Boundary
-
-Adera does NOT currently include:
-
-* Real CBE integration
-* Real Telebirr integration
-* Real bank databases
-* Real customer information
-* Real-money transactions
-* Automatic account freezing
-* Automatic accusations
-* National fraud database
-* Large AI/ML model
-* Every possible fraud type
-* Neo4j
-
-The project uses synthetic data for demonstration and testing.
-
----
-
-# Main Demonstration
-
-The final MVP should demonstrate:
+Relationship types include:
 
 ```text
-User enters recipient
-        ↓
-User enters amount
-        ↓
-Adera checks recipient
-        ↓
-Backend retrieves fraud intelligence
-        ↓
-Risk Engine calculates risk
-        ↓
-Risk explanation is generated
-        ↓
-User receives warning
-        ↓
-Fraud report can be submitted
-        ↓
-Analyst can investigate reports/alerts
+SHARED_PHONE
+SHARED_DEVICE
+TRANSACTION
+RELATED_ACCOUNT
 ```
 
-The main idea is:
+All project data is synthetic.
 
-> **Detect → Score → Explain → Respond → Investigate**
+No real banking or customer information is used.
 
 ---
 
-# Team Rule
+# 7. Technology Stack
 
-The goal is not for six people to build six separate projects.
+## Frontend
 
-The goal is to build **one Adera system with six coordinated components**.
+```text
+React
+Vite
+JavaScript / TypeScript
+Tailwind CSS
+Axios
+React Router
+React Flow
+```
 
-Use the shared repository, communicate before changing shared files, and keep `develop` working.
+## Backend
+
+```text
+Python
+FastAPI
+Pydantic
+SQLAlchemy
+JWT
+```
+
+## Database
+
+```text
+PostgreSQL
+Alembic
+```
+
+## Risk Engine
+
+```text
+Python
+Rule-based scoring
+Pytest
+```
+
+## Security & Testing
+
+```text
+Pytest
+Postman
+Burp Suite
+OWASP ZAP
+```
+
+## Development
+
+```text
+Git
+GitHub
+Docker
+Docker Compose
+VS Code
+```
+
+---
+
+# 8. Project Structure
+
+```text
+adera/
+│
+├── backend/
+│   ├── api/
+│   ├── auth/
+│   ├── database/
+│   ├── models/
+│   ├── schemas/
+│   ├── services/
+│   └── tests/
+│
+├── frontend/
+│   └── src/
+│       ├── components/
+│       ├── pages/
+│       └── services/
+│
+├── data/
+│   ├── scam_taxonomy.json
+│   ├── fraud_indicators.json
+│   ├── synthetic_reports.json
+│   └── synthetic_scam_cases.json
+│
+├── docs/
+│
+├── tests/
+│
+├── alembic.ini
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# 9. API
+
+The main risk endpoint is:
+
+```text
+POST /risk/check
+```
+
+Request:
+
+```json
+{
+  "recipient_phone": "0912345678",
+  "amount": 5000
+}
+```
+
+Response:
+
+```json
+{
+  "score": 82,
+  "level": "CRITICAL",
+  "recommendation": "STOP_AND_VERIFY",
+  "reasons": [
+    "Multiple independent fraud reports",
+    "Recent fraud reports exist",
+    "Previous scam case exists"
+  ]
+}
+```
+
+Other endpoints include:
+
+```text
+POST /auth/register
+POST /auth/login
+
+POST /risk/check
+
+POST /transactions/simulate
+GET  /transactions/{id}
+
+POST /reports
+GET  /reports
+
+GET  /recipients/{phone}
+
+GET  /alerts
+GET  /alerts/{id}
+PATCH /alerts/{id}
+
+GET  /cases
+POST /cases
+GET  /cases/{id}
+
+POST /cases/{id}/decision
+```
+
+---
+
+# 10. Backend Architecture
+
+```text
+                 React Frontend
+                       │
+                       ▼
+                 FastAPI Backend
+                       │
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+     PostgreSQL    Risk Engine    Auth
+          │            │
+          └──────┬─────┘
+                 ▼
+          Risk Assessment
+                 │
+                 ▼
+               Alert
+                 │
+                 ▼
+          Investigation
+                 │
+                 ▼
+               Case
+                 │
+                 ▼
+          Analyst Decision
+```
+
+---
+
+# 11. Team
+
+Adera is being developed by six team members.
+
+| Member             | Responsibility                                |
+| ------------------ | --------------------------------------------- |
+| Member 1 — Biruk   | Threat Intelligence                           |
+| Member 2 — Kassu   | Risk Engine & Detection                       |
+| Member 3 — Reyyan  | Database & Fraud Intelligence                 |
+| Member 4 — Ahmed   | Backend & API — 70%                           |
+| Member 5 — Getch   | Frontend & Investigation Interface            |
+| Member 6 — Tigiste | Backend — 30%, Alerts, Integration & Security |
+
+The backend is shared between Ahmed and Tigiste.
+
+```text
+Ahmed     → approximately 70%
+Tigiste   → approximately 30%
+```
+
+Tigiste is a backend co-developer, not only a tester.
+
+---
+
+# 12. GitHub Workflow
+
+The project uses one shared GitHub repository.
+
+Repository:
+
+```text
+adera
+```
+
+Branches:
+
+```text
+main
+develop
+
+feature/threat-intelligence
+feature/risk-engine
+feature/database
+feature/backend
+feature/frontend
+feature/backend-testing
+```
+
+Workflow:
+
+```text
+Feature Branch
+      ↓
+Pull Request
+      ↓
+develop
+      ↓
+Integration Testing
+      ↓
+main
+```
+
+Nobody should directly push to `main`.
+
+The feature branches are used for individual development.
+
+`develop` is the shared integration branch.
+
+`main` contains the stable project.
+
+---
+
+# 13. Development Rules
+
+The team follows these rules:
+
+### 1. Use the shared repository
+
+Do not create separate repositories for each member.
+
+### 2. Use feature branches
+
+Do not develop directly on `main`.
+
+### 3. Use Pull Requests
+
+Completed work should go through a Pull Request before entering `develop`.
+
+### 4. Keep API contracts stable
+
+Frontend and backend development depend on agreed request/response formats.
+
+### 5. Use mock data when necessary
+
+Members should not wait for another component to be completed before starting.
+
+### 6. Use synthetic data
+
+Do not use real banking records or customer information.
+
+### 7. Do not commit secrets
+
+Never commit:
+
+```text
+.env
+passwords
+API keys
+private credentials
+```
+
+### 8. Test before merging
+
+Code should be tested before it is merged into the shared development branch.
+
+---
+
+# 14. Security
+
+Adera is designed as a defensive cybersecurity project.
+
+Security areas include:
+
+```text
+Authentication
+Authorization
+Input validation
+Password hashing
+JWT security
+SQL injection prevention
+Sensitive information protection
+API abuse
+Error handling
+Role-based access control
+```
+
+Roles:
+
+```text
+USER
+ANALYST
+ADMIN
+```
+
+The backend enforces authorization.
+
+The frontend must never be trusted to enforce permissions by itself.
+
+---
+
+# 15. Synthetic Data
+
+Adera does not use real banking data.
+
+The project uses fictional:
+
+```text
+Users
+Accounts
+Phone numbers
+Transactions
+Fraud reports
+Scam cases
+Relationships
+Risk assessments
+Alerts
+```
+
+The synthetic data is designed to demonstrate different situations:
+
+```text
+LOW RISK
+MODERATE RISK
+HIGH RISK
+CRITICAL RISK
+FALSE POSITIVE
+```
+
+---
+
+# 16. MVP Scope
+
+The MVP focuses on one complete investigation workflow:
+
+```text
+Payment
+   ↓
+Recipient Intelligence
+   ↓
+Relationship Analysis
+   ↓
+Risk Assessment
+   ↓
+Alert
+   ↓
+Investigation
+   ↓
+Case
+   ↓
+Analyst Decision
+```
+
+The team will prioritize making this workflow work end-to-end before adding optional features.
+
+---
+
+# 17. Out of Scope
+
+The MVP does **not** include:
+
+```text
+Real CBE integration
+Real Telebirr integration
+Real bank databases
+Real customer information
+Real-money transactions
+Automatic account freezing
+Automatic accusations
+National fraud database
+Large-scale AI/ML models
+Every possible fraud type
+Neo4j
+Enterprise-scale infrastructure
+```
+
+Adera is a proof of concept, not a production banking security system.
+
+---
+
+# 18. Final Demonstration
+
+The final demonstration should tell one complete story.
+
+A user receives a suspicious message:
+
+```text
+"Please send 5,000 ETB urgently to 0912345678."
+```
+
+The user opens the simulated payment application.
+
+They enter:
+
+```text
+Recipient:
+0912345678
+
+Amount:
+5,000 ETB
+```
+
+Adera checks the recipient.
+
+The system finds:
+
+```text
+Multiple fraud reports
+Recent reports
+Related accounts
+Previous scam cases
+Suspicious activity
+```
+
+The Risk Engine produces:
+
+```text
+82 / 100
+CRITICAL
+```
+
+The user sees:
+
+```text
+ADERA SECURITY WARNING
+
+This recipient has multiple risk indicators.
+
+Risk Score: 82/100
+
+Recommendation:
+STOP AND VERIFY
+```
+
+The user can cancel or verify the payment.
+
+The analyst then opens the Adera Investigation Center.
+
+The analyst sees:
+
+```text
+Alert
+   ↓
+Recipient
+   ↓
+Related Accounts
+   ↓
+Transactions
+   ↓
+Fraud Reports
+   ↓
+Previous Cases
+   ↓
+Evidence
+```
+
+The analyst creates or opens a case and records a decision.
+
+This demonstrates:
+
+**Detect → Connect → Score → Alert → Investigate → Decide**
+
+---
+
+# 19. Core Principle
+
+Adera is not simply:
+
+> "A website that gives a fraud score."
+
+It is a small **fraud-intelligence and investigation platform**.
+
+The important idea is that suspicious activity becomes more understandable when different pieces of information are connected:
+
+```text
+Transactions
++
+Fraud Reports
++
+Accounts
++
+Relationships
++
+Scam Cases
++
+Risk Signals
++
+Alerts
++
+Analyst Decisions
+```
+
+The project demonstrates how these connected signals can help analysts investigate potential payment fraud while giving users understandable warnings.
+
+---
+
+# 20. Definition of Done
+
+The MVP is considered complete when the team can demonstrate:
+
+```text
+1. User enters a recipient.
+        ↓
+2. User enters an amount.
+        ↓
+3. Adera checks the recipient.
+        ↓
+4. Backend retrieves fraud intelligence.
+        ↓
+5. Related entities are identified.
+        ↓
+6. Risk Engine evaluates the signals.
+        ↓
+7. Risk Assessment is generated.
+        ↓
+8. Alert is created when appropriate.
+        ↓
+9. User receives an understandable warning.
+        ↓
+10. Analyst investigates the alert.
+        ↓
+11. Analyst views related entities and evidence.
+        ↓
+12. Analyst creates/opens a case.
+        ↓
+13. Analyst records a decision.
+        ↓
+14. Security and integration tests pass.
+```
+
+The priority is a working end-to-end system rather than a large number of unfinished features.
