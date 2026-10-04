@@ -1,4 +1,6 @@
-from sqlalchemy import ForeignKey, Numeric, String
+from datetime import datetime
+
+from sqlalchemy import DateTime, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.models.base import Base
@@ -12,3 +14,8 @@ class Transaction(Base):
     recipient_phone: Mapped[str] = mapped_column(String(20), nullable=False)
     amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
     status: Mapped[str] = mapped_column(String(30), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )

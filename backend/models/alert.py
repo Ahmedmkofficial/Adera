@@ -1,4 +1,6 @@
-from sqlalchemy import String, Text
+from datetime import datetime
+
+from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.models.base import Base
@@ -12,3 +14,12 @@ class Alert(Base):
     message: Mapped[str] = mapped_column(Text, nullable=False)
     severity: Mapped[str] = mapped_column(String(20), nullable=False)
     status: Mapped[str] = mapped_column(String(30), default="OPEN")
+    risk_assessment_id: Mapped[int | None] = mapped_column(
+        ForeignKey("risk_assessments.id"),
+        nullable=True,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )

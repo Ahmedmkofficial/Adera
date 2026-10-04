@@ -1,38 +1,23 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from backend.auth.security import get_current_user
 from backend.database.session import get_db
-from backend.models.fraud_report import FraudReport
 from backend.models.transaction import Transaction
-from backend.schemas.transaction import TransactionCreate
-from backend.services.risk_engine import calculate_risk
+from backend.models.user import User
+from backend.schemas.transaction import TransactionCreate, TransactionRead
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
 
-@router.post("/simulate")
+@router.post("/simulate", response_model=TransactionRead)
 def simulate_payment(
     transaction: TransactionCreate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
-    report_count = (
-        db.query(FraudReport.reporter_id)
-        .filter(
-            FraudReport.recipient_phone == transaction.recipient_phone
-        )
-        .distinct()
-        .count()
-    )
-
-    risk = calculate_risk(
-        report_count=report_count,
-        recent_report_count=0,
-        related_case_count=0,
-        suspicious_connection_count=0,
-    )
-
     new_transaction = Transaction(
-        sender_id=transaction.sender_id,
+        sender_id=current_user.id,
         recipient_phone=transaction.recipient_phone,
         amount=transaction.amount,
         status="SIMULATED",
@@ -42,12 +27,26 @@ def simulate_payment(
     db.commit()
     db.refresh(new_transaction)
 
-    return {
-        "message": "Payment simulation completed",
-        "transaction_id": new_transaction.id,
-        "status": new_transaction.status,
-        "risk_score": risk["score"],
-        "risk_level": risk["level"],
-        "recommendation": risk["recommendation"],
-        "risk_reasons": risk["reasons"],
-    }
+    return new_transaction
+
+
+@router.get("/{transaction_id}", response_model=TransactionRead)
+def get_transaction(
+    transaction_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    transaction = db.query(Transaction).filter(Transaction.id == transaction_id).first()
+    if transaction is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Transaction not found",
+        )
+
+    if transaction.sender_id != current_user.id and current_user.role not in {"ANALYST", "ADMIN"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not allowed to view this transaction",
+        )
+
+    return transaction
