@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "domain": "digital_payments_ethiopia",
+  "categories": [
+    {
+      "id": "impersonation",
+      "name": "Impersonation Scams",
+      "description": "Scammers disguise themselves as trusted individuals, authority figures, or organizations to deceive victims into transferring funds.",
+      "severity": "CRITICAL",
+      "subtypes": [
+        {
+          "id": "friend_family_impersonation",
+          "name": "Friend / Family Emergency Impersonation",
+          "description": "Attacker claims to be a relative or friend experiencing an urgent crisis (hospital emergency, police detention, stranded travel).",
+          "common_channels": ["Telegram", "WhatsApp", "Phone Call", "SMS"],
+          "typical_indicators": [
+            "urgent_request",
+            "identity_claim",
+            "new_recipient",
+            "unusual_payment_request",
+            "avoid_voice_verification"
+          ]
+        },
+        {
+          "id": "employee_boss_impersonation",
+          "name": "Employee / Boss Impersonation (CEO Fraud)",
+          "description": "Attacker impersonates a company manager or business owner requesting an immediate payment to a vendor or client.",
+          "common_channels": ["Telegram", "Email", "SMS"],
+          "typical_indicators": [
+            "urgent_request",
+            "identity_claim",
+            "unregistered_business_account",
+            "unusual_payment_amount"
+          ]
+        },
+        {
+          "id": "bank_official_impersonation",
+          "name": "Bank / Telecom Official Impersonation",
+          "description": "Attacker poses as a representative from CBE, Telebirr, or Ethio Telecom claiming account blocking, system maintenance, or security updates.",
+          "common_channels": ["Phone Call", "SMS"],
+          "typical_indicators": [
+            "identity_claim",
+            "otp_solicitation",
+            "pin_request",
+            "coerced_immediate_action"
+          ]
+        },
+        {
+          "id": "organization_impersonation",
+          "name": "Organization / NGO Impersonation",
+          "description": "Attacker claims to represent a charitable foundation, government office, or church requesting donations or registration fees.",
+          "common_channels": ["Facebook", "Telegram", "Public Flyers"],
+          "typical_indicators": [
+            "identity_claim",
+            "personal_account_for_org",
+            "new_recipient"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fake_seller",
+      "name": "Fake Seller & E-commerce Fraud",
+      "description": "Attacker advertises goods or services online, requests upfront mobile payment, and vanishes without delivering the item.",
+      "severity": "HIGH",
+      "subtypes": [
+        {
+          "id": "advance_payment_goods",
+          "name": "Advance Payment for Electronics/Vehicles",
+          "description": "Promising discounted mobile phones, electronics, or motor vehicles upon partial or full deposit.",
+          "common_channels": ["Telegram Channels", "TikTok", "Facebook Marketplace"],
+          "typical_indicators": [
+            "advance_payment_demand",
+            "below_market_price",
+            "new_payment_account",
+            "multiple_unverified_reports"
+          ]
+        },
+        {
+          "id": "social_media_store_scam",
+          "name": "Fake Instagram / Telegram Clothing Store",
+          "description": "Fake boutique pages collecting payments for clothes or shoes without physical inventory or shop location.",
+          "common_channels": ["Telegram", "Instagram"],
+          "typical_indicators": [
+            "advance_payment_demand",
+            "no_physical_address",
+            "personal_wallet_payment"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "investment_scam",
+      "name": "Investment & Ponzi Schemes",
+      "description": "Fraudulent financial schemes promising unrealistic guaranteed returns, daily interest, or referral bonuses.",
+      "severity": "CRITICAL",
+      "subtypes": [
+        {
+          "id": "ponzi_pyramid",
+          "name": "Pyramid / Ponzi Multi-Level Scam",
+          "description": "Victims are persuaded to deposit funds into a pooled account with promises of passive daily income and recruitment rewards.",
+          "common_channels": ["Telegram Groups", "WhatsApp Groups"],
+          "typical_indicators": [
+            "guaranteed_high_return",
+            "referral_bonus_tier",
+            "high_transaction_velocity",
+            "pool_account_pattern"
+          ]
+        },
+        {
+          "id": "job_task_scam",
+          "name": "Online Task / Freelance Deposit Scam",
+          "description": "Victims are hired for easy online tasks (liking YouTube videos, reviewing products) but must deposit funds to unlock earnings.",
+          "common_channels": ["Telegram", "SMS"],
+          "typical_indicators": [
+            "advance_fee_for_payout",
+            "task_completion_tier",
+            "new_recipient"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urgent_payment",
+      "name": "Urgent & Pressure Scams",
+      "description": "Exploiting high-emotion situations to force rapid fund transfers before the victim can verify facts.",
+      "severity": "HIGH",
+      "subtypes": [
+        {
+          "id": "accidental_transfer_refund",
+          "name": "Fake Accidental Transfer Refund",
+          "description": "Attacker sends a fake SMS mimicking a mobile money credit notification, then calls asking for a refund of the 'accidentally sent' funds.",
+          "common_channels": ["SMS", "Phone Call"],
+          "typical_indicators": [
+            "fake_sms_notification",
+            "immediate_refund_demand",
+            "unverified_incoming_balance"
+          ]
+        },
+        {
+          "id": "emergency_medical_bail",
+          "name": "Hospital / Police Emergency Hoax",
+          "description": "Attacker calls pretending to be a doctor or police officer demanding immediate payment for a relative's treatment or bail.",
+          "common_channels": ["Phone Call"],
+          "typical_indicators": [
+            "urgent_request",
+            "high_emotional_pressure",
+            "new_recipient"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fake_prize_giveaway",
+      "name": "Fake Prize & Lottery Scams",
+      "description": "Victim is informed they won a large prize or promotion but must pay tax, processing fees, or airtime first.",
+      "severity": "MODERATE",
+      "subtypes": [
+        {
+          "id": "lottery_winning_fee",
+          "name": "Telecom / Car Giveaway Fee",
+          "description": "Fake notification claiming the victim won a vehicle or millions in ETB, requiring a delivery or fee payment.",
+          "common_channels": ["Phone Call", "SMS"],
+          "typical_indicators": [
+            "advance_fee_demand",
+            "unsolicited_win_notification",
+            "personal_phone_recipient"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "account_recovery",
+      "name": "Account Takeover & OTP Harvesting",
+      "description": "Attempts to gain unauthorized access to victim mobile banking accounts or social media accounts.",
+      "severity": "CRITICAL",
+      "subtypes": [
+        {
+          "id": "otp_harvesting",
+          "name": "SMS OTP / PIN Phishing",
+          "description": "Attacker triggers a password reset on victim's account and tricks the victim into sharing the 4-6 digit SMS confirmation code.",
+          "common_channels": ["Phone Call", "SMS", "Telegram"],
+          "typical_indicators": [
+            "otp_solicitation",
+            "pin_request",
+            "account_takeover_precursor"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Investigated scam cases and entity-relationship clusters for Adera Fraud Intelligence.",
+  "cases": [
+    {
+      "case_id": "CASE-1042",
+      "case_title": "Adama/Addis Impersonation Network",
+      "primary_target_phone": "0912345678",
+      "primary_target_name": "Abebe Tadesse (Syndicate Mule Wallet)",
+      "scam_type": "impersonation",
+      "scam_subtype": "friend_family_impersonation",
+      "confidence_level": "HIGH_CONFIDENCE_RISK",
+      "total_reports": 7,
+      "recent_reports_7days": 3,
+      "suspicious_connected_accounts": 3,
+      "linked_phones": [
+        "0912345678",
+        "0911998877",
+        "0922887766"
+      ],
+      "linked_report_ids": [
+        "REP-2026-0901",
+        "REP-2026-0902",
+        "REP-2026-0903",
+        "REP-2026-0850",
+        "REP-2026-0842",
+        "REP-2026-0810",
+        "REP-2026-0790"
+      ],
+      "total_victim_loss_etb": 43000,
+      "status": "ACTIVE_INVESTIGATION",
+      "assigned_analyst": "Analyst #104",
+      "first_detected": "2026-08-15T13:40:00Z",
+      "last_activity": "2026-10-08T14:30:00Z",
+      "analyst_notes": "High-confidence organized impersonation cluster operating across Telegram and SIM-swapped phone accounts. Money is quickly split across two secondary recipient wallets (0911998877 & 0922887766)."
+    },
+    {
+      "case_id": "CASE-1038",
+      "case_title": "Telegram Electronics Discount Scam Ring",
+      "primary_target_phone": "0912345678",
+      "primary_target_name": "Abebe Tadesse",
+      "scam_type": "fake_seller",
+      "scam_subtype": "advance_payment_goods",
+      "confidence_level": "SUSPICIOUS",
+      "total_reports": 2,
+      "recent_reports_7days": 0,
+      "suspicious_connected_accounts": 1,
+      "linked_phones": [
+        "0912345678",
+        "0933001122"
+      ],
+      "linked_report_ids": [
+        "REP-2026-0850"
+      ],
+      "total_victim_loss_etb": 12000,
+      "status": "ESCALATED_TO_COMPLIANCE",
+      "assigned_analyst": "Analyst #102",
+      "first_detected": "2026-09-14T16:00:00Z",
+      "last_activity": "2026-09-20T11:20:00Z",
+      "analyst_notes": "Fake Telegram channel advertising imported mobile phones. Requires 50% advance deposit via mobile banking."
+    },
+    {
+      "case_id": "CASE-1050",
+      "case_title": "Ethio-Crypto Daily Return Ponzi Syndicate",
+      "primary_target_phone": "0944001122",
+      "primary_target_name": "Pyramid Pool Alpha",
+      "scam_type": "investment_scam",
+      "scam_subtype": "ponzi_pyramid",
+      "confidence_level": "HIGH_CONFIDENCE_RISK",
+      "total_reports": 14,
+      "recent_reports_7days": 5,
+      "suspicious_connected_accounts": 6,
+      "linked_phones": [
+        "0944001122",
+        "0944001123",
+        "0944001124"
+      ],
+      "linked_report_ids": [
+        "REP-2026-0920"
+      ],
+      "total_victim_loss_etb": 185000,
+      "status": "LAW_ENFORCEMENT_REFERRAL",
+      "assigned_analyst": "Analyst #101",
+      "first_detected": "2026-09-01T08:00:00Z",
+      "last_activity": "2026-10-04T15:30:00Z",
+      "analyst_notes": "Large-scale pyramid investment scheme operating via Telegram bot. Promised 10% daily returns for recruitment tiers."
+    }
+  ]
+}
