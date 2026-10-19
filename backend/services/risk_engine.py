@@ -1,41 +1,58 @@
 def calculate_risk(
-    report_count: int,
-    recent_report_count: int,
-    related_case_count: int,
-    suspicious_connection_count: int,
+    report_count: int = 0,
+    recent_report_count: int = 0,
+    related_case_count: int = 0,
+    suspicious_connection_count: int = 0,
+    independent_report_count: int | None = None,
+    repeated_scam_pattern: bool = False,
+    unusual_transaction: bool = False,
+    transaction_amount: float | None = None,
 ) -> dict:
+
+    if independent_report_count is None:
+        independent_report_count = report_count
 
     score = 0
     reasons = []
 
-    # Reports from different users
-    if report_count >= 7:
-        score += 35
-        reasons.append("Multiple independent fraud reports")
-    elif report_count >= 3:
+    if independent_report_count >= 7:
         score += 20
-        reasons.append("Several fraud reports")
-    elif report_count >= 1:
+        reasons.append("Multiple independent fraud reports")
+    elif independent_report_count >= 3:
         score += 10
+        reasons.append("Several independent fraud reports")
+    elif independent_report_count >= 1:
+        score += 5
         reasons.append("Fraud report exists")
 
-    # Recent reports
     if recent_report_count >= 3:
-        score += 20
-        reasons.append("Multiple recent reports")
+        score += 15
+        reasons.append("Recent fraud reports exist")
+    elif recent_report_count >= 1:
+        score += 5
+        reasons.append("Recent fraud report exists")
 
-    # Related scam cases
     if related_case_count >= 2:
-        score += 20
-        reasons.append("Related scam cases detected")
+        score += 25
+        reasons.append("Previous scam case exists")
     elif related_case_count == 1:
-        score += 10
-        reasons.append("Related scam case detected")
+        score += 15
+        reasons.append("Previous scam case detected")
 
-    # Suspicious relationships
     if suspicious_connection_count >= 2:
         score += 15
-        reasons.append("Suspicious connections detected")
+        reasons.append("Suspicious account relationship detected")
+    elif suspicious_connection_count == 1:
+        score += 10
+        reasons.append("Suspicious account relationship detected")
+
+    if repeated_scam_pattern:
+        score += 10
+        reasons.append("Repeated scam pattern detected")
+
+    if unusual_transaction or (transaction_amount is not None and transaction_amount >= 5000):
+        score += 10
+        reasons.append("Unusual transaction behavior detected")
 
     score = min(score, 100)
 
@@ -44,13 +61,13 @@ def calculate_risk(
         recommendation = "STOP_AND_VERIFY"
     elif score >= 50:
         level = "HIGH"
-        recommendation = "VERIFY_RECIPIENT"
+        recommendation = "VERIFY"
     elif score >= 25:
         level = "MODERATE"
-        recommendation = "PROCEED_WITH_CAUTION"
+        recommendation = "REVIEW"
     else:
         level = "LOW"
-        recommendation = "PROCEED"
+        recommendation = "ALLOW"
 
     return {
         "score": score,
