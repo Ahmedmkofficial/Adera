@@ -25,7 +25,7 @@ def upgrade() -> None:
         sa.Column("source_account_id", sa.Integer(), nullable=False),
         sa.Column("target_account_id", sa.Integer(), nullable=False),
         sa.Column("relationship_type", sa.String(length=30), nullable=False),
-        sa.Column("created_at", sa.DateTime(), nullable=False, server_default=sa.text("CURRENT_TIMESTAMP")),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(["source_account_id"], ["payment_accounts.id"]),
         sa.ForeignKeyConstraint(["target_account_id"], ["payment_accounts.id"]),
         sa.PrimaryKeyConstraint("id"),

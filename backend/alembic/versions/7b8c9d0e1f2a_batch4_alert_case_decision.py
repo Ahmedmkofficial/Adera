@@ -21,6 +21,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.add_column("alerts", sa.Column("risk_assessment_id", sa.Integer(), nullable=True))
     op.add_column("alerts", sa.Column("created_at", sa.DateTime(), nullable=False, server_default=sa.text("CURRENT_TIMESTAMP")))
+    op.alter_column("alerts", "created_at", server_default=None)
     op.create_foreign_key(
         "fk_alerts_risk_assessment_id_risk_assessments",
         "alerts",
@@ -34,6 +35,7 @@ def upgrade() -> None:
     op.add_column("scam_cases", sa.Column("decision", sa.String(length=30), nullable=True))
     op.add_column("scam_cases", sa.Column("decision_notes", sa.Text(), nullable=True))
     op.add_column("scam_cases", sa.Column("created_at", sa.DateTime(), nullable=False, server_default=sa.text("CURRENT_TIMESTAMP")))
+    op.alter_column("scam_cases", "created_at", server_default=None)
     op.create_foreign_key(
         "fk_scam_cases_alert_id_alerts",
         "scam_cases",
@@ -49,7 +51,6 @@ def upgrade() -> None:
         ["id"],
     )
 
-    op.add_column("scam_cases", sa.Column("scam_type", sa.String(length=50), nullable=False, server_default="INVESTIGATION"))
 
 
 def downgrade() -> None:
@@ -60,8 +61,6 @@ def downgrade() -> None:
     op.drop_column("scam_cases", "decision")
     op.drop_column("scam_cases", "analyst_id")
     op.drop_column("scam_cases", "alert_id")
-    op.drop_column("scam_cases", "scam_type")
-
     op.drop_constraint("fk_alerts_risk_assessment_id_risk_assessments", "alerts", type_="foreignkey")
     op.drop_column("alerts", "created_at")
     op.drop_column("alerts", "risk_assessment_id")

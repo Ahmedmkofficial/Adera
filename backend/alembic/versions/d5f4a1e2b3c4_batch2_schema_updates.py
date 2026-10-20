@@ -27,6 +27,8 @@ def upgrade() -> None:
         "transactions",
         sa.Column("created_at", sa.DateTime(), nullable=False, server_default=sa.text("CURRENT_TIMESTAMP")),
     )
+    op.alter_column("fraud_reports", "scam_type", server_default=None)
+    op.alter_column("transactions", "created_at", server_default=None)
 
 
 def downgrade() -> None:

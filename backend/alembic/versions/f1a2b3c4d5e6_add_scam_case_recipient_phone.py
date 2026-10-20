@@ -23,6 +23,7 @@ def upgrade() -> None:
         "scam_cases",
         sa.Column("recipient_phone", sa.String(length=20), nullable=False, server_default=""),
     )
+    op.alter_column("scam_cases", "recipient_phone", server_default=None)
 
 
 def downgrade() -> None:

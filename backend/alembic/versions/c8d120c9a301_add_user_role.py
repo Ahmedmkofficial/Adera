@@ -24,6 +24,7 @@ def upgrade() -> None:
         "users",
         sa.Column("role", sa.String(length=20), nullable=False, server_default="USER"),
     )
+    op.alter_column("users", "role", server_default=None)
 
 
 def downgrade() -> None:
