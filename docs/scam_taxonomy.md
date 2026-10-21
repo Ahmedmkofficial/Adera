@@ -1,7 +1,7 @@
 # Adera Scam Taxonomy & Threat Intelligence Research
 
-**Author:** Biruk (Team Member 1: Threat Intelligence & Scam Intelligence)  
-**System:** Adera Digital Payment Fraud Intelligence & Recipient-Risk Platform  
+**Author:** Biruk (Team Member 1: Threat Intelligence & Scam Intelligence)
+**System:** Adera Digital Payment Fraud Intelligence & Recipient-Risk Platform
 **Target Region / Context:** Ethiopian Digital Financial Services (CBE Birr, Telebirr, M-Pesa, Bank Transfer Interfaces)
 
 ---

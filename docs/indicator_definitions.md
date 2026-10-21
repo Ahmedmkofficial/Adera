@@ -1,6 +1,6 @@
 # Adera Fraud Indicator Dictionary & Weight Rationale
 
-**Author:** Biruk (Team Member 1: Threat Intelligence & Scam Intelligence)  
+**Author:** Biruk (Team Member 1: Threat Intelligence & Scam Intelligence)
 **Target Module:** Adera Risk Engine & Backend Integration
 
 > **Runtime boundary:** The indicator weights and evaluation guidance below are
