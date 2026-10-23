@@ -1,7 +1,7 @@
 import os
 
 os.environ.setdefault("DATABASE_URL", "sqlite://")
-os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
+os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key-for-adera-tests-32-bytes")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30")
 
@@ -9,6 +9,10 @@ from fastapi.testclient import TestClient
 
 from backend.database import session as session_module
 from backend.main import app
+from backend.rate_limiter import limiter
+
+# Tests create many users from one client; production limits remain enabled.
+limiter.enabled = False
 from backend.models.alert import Alert
 from backend.models.base import Base
 from backend.models.payment_account import PaymentAccount
@@ -20,20 +24,29 @@ client = TestClient(app)
 
 
 def reset_db():
+    limiter.reset()
     Base.metadata.drop_all(bind=session_module.engine)
     Base.metadata.create_all(bind=session_module.engine)
 
 
 def register_user(phone, name, password="secret123", role="USER"):
-    return client.post(
+    response = client.post(
         "/auth/register",
         json={
             "phone": phone,
             "name": name,
             "password": password,
-            "role": role,
         },
     )
+    if response.status_code == 201 and role != "USER":
+        db = session_module.SessionLocal()
+        try:
+            user = db.query(User).filter(User.phone == phone).first()
+            user.role = role
+            db.commit()
+        finally:
+            db.close()
+    return response
 
 
 def login_user(phone, password="secret123"):

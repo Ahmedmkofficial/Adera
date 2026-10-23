@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from backend.database.session import get_db
+from backend.rate_limiter import limiter
 from backend.models.user import User
 from backend.schemas.auth import TokenResponse, UserLogin, UserPublic, UserRegister
 from backend.auth.security import (
@@ -16,7 +17,8 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=UserPublic, status_code=status.HTTP_201_CREATED)
-def register_user(user_data: UserRegister, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def register_user(request: Request, user_data: UserRegister, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.phone == user_data.phone).first()
     if existing_user:
         raise HTTPException(
@@ -28,7 +30,7 @@ def register_user(user_data: UserRegister, db: Session = Depends(get_db)):
         phone=user_data.phone,
         name=user_data.name,
         password_hash=get_password_hash(user_data.password),
-        role=user_data.role,
+        role="USER",
     )
 
     db.add(new_user)
@@ -39,7 +41,8 @@ def register_user(user_data: UserRegister, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=TokenResponse)
-def login_user(user_data: UserLogin, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def login_user(request: Request, user_data: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.phone == user_data.phone).first()
 
     if not user or not verify_password(user_data.password, user.password_hash):

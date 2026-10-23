@@ -1,7 +1,7 @@
 import os
 
 os.environ.setdefault("DATABASE_URL", "sqlite://")
-os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key")
+os.environ.setdefault("JWT_SECRET_KEY", "test-secret-key-for-adera-tests-32-bytes")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "30")
 
@@ -9,6 +9,9 @@ from fastapi.testclient import TestClient
 
 from backend.database import session as session_module
 from backend.main import app
+from backend.rate_limiter import limiter
+from backend.auth.security import create_access_token, get_password_hash
+from backend.models.alert import Alert
 from backend.models.base import Base
 from backend.models.fraud_report import FraudReport
 from backend.models.payment_account import PaymentAccount
@@ -21,6 +24,7 @@ client = TestClient(app)
 
 
 def reset_db():
+    limiter.reset()
     Base.metadata.drop_all(bind=session_module.engine)
     Base.metadata.create_all(bind=session_module.engine)
 
@@ -104,6 +108,71 @@ def test_risk_check_with_valid_recipient_and_save():
         db.close()
 
 
+def test_repeated_high_risk_checks_reuse_active_alert():
+    reset_db()
+    recipient_phone = "0911000001"
+    register_user(recipient_phone, "Synthetic Recipient")
+    create_account_for_phone(recipient_phone)
+
+    reporter_tokens = []
+    db = session_module.SessionLocal()
+    try:
+        for index in range(7):
+            reporter_phone = f"09120001{index:02d}"
+            reporter = User(
+                phone=reporter_phone,
+                name=f"Synthetic Reporter {index}",
+                password_hash=get_password_hash("secret123"),
+                role="USER",
+            )
+            db.add(reporter)
+            db.flush()
+            reporter_tokens.append(create_access_token(reporter.id, reporter.role))
+        db.commit()
+    finally:
+        db.close()
+
+    for index, token in enumerate(reporter_tokens):
+        response = client.post(
+            "/reports",
+            headers={"Authorization": f"Bearer {token}"},
+            json={
+                "recipient_phone": recipient_phone,
+                "scam_type": "IMPERSONATION" if index % 2 else "FAKE_SELLER",
+                "description": f"Synthetic repeat-alert test report {index} with an urgent payment request.",
+            },
+        )
+        assert response.status_code == 200, response.text
+
+    headers = {"Authorization": f"Bearer {reporter_tokens[0]}"}
+    payload = {"recipient_phone": recipient_phone, "amount": 5000}
+    first = client.post("/risk/check", headers=headers, json=payload)
+    second = client.post("/risk/check", headers=headers, json=payload)
+    assert first.status_code == second.status_code == 200
+    assert first.json() == second.json()
+
+    db = session_module.SessionLocal()
+    try:
+        assessments = (
+            db.query(RiskAssessment)
+            .filter(RiskAssessment.recipient_phone == recipient_phone)
+            .all()
+        )
+        alerts = (
+            db.query(Alert)
+            .filter(
+                Alert.recipient_phone == recipient_phone,
+                Alert.status == "OPEN",
+            )
+            .all()
+        )
+        assert len(assessments) == 2
+        assert len(alerts) == 1
+        assert alerts[0].risk_assessment_id == assessments[-1].id
+    finally:
+        db.close()
+
+
 def test_risk_check_invalid_amount():
     reset_db()
     register_user("0911111111", "Recipient")
@@ -151,13 +220,14 @@ def test_risk_check_recipient_not_found():
 
 def test_transaction_simulation_and_retrieval():
     reset_db()
-    register_user("0911111111", "Sender")
+    sender = register_user("0911111111", "Sender").json()
+    other = register_user("0911111112", "Other").json()
     token = login_user("0911111111")
 
     response = client.post(
         "/transactions/simulate",
         headers={"Authorization": f"Bearer {token}"},
-        json={"recipient_phone": "0912222222", "amount": 1500},
+        json={"sender_id": other["id"], "recipient_phone": "0912222222", "amount": 1500},
     )
 
     assert response.status_code == 200
@@ -165,6 +235,7 @@ def test_transaction_simulation_and_retrieval():
     assert payload["status"] == "SIMULATED"
     assert payload["amount"] == 1500
     assert payload["recipient_phone"] == "0912222222"
+    assert payload["sender_id"] == sender["id"]
 
     transaction_id = payload["id"]
     get_response = client.get(
@@ -223,6 +294,28 @@ def test_submit_and_list_reports():
     assert len(list_response.json()) >= 1
 
 
+def test_regular_users_only_list_their_own_reports():
+    reset_db()
+    register_user("0911111111", "Reporter One")
+    register_user("0911111112", "Reporter Two")
+    token_one = login_user("0911111111")
+    token_two = login_user("0911111112")
+    body = {
+        "recipient_phone": "0912222222",
+        "scam_type": "IMPERSONATION",
+        "description": "Synthetic access-control fixture report.",
+    }
+
+    own = client.post("/reports", headers={"Authorization": f"Bearer {token_one}"}, json=body)
+    other = client.post("/reports", headers={"Authorization": f"Bearer {token_two}"}, json=body)
+    assert own.status_code == other.status_code == 200
+
+    listing = client.get("/reports", headers={"Authorization": f"Bearer {token_one}"})
+
+    assert listing.status_code == 200
+    assert [report["id"] for report in listing.json()] == [own.json()["id"]]
+
+
 def test_reports_submission_requires_authentication():
     reset_db()
     response = client.post(
@@ -266,6 +359,38 @@ def test_recipient_summary_returns_data_for_existing_phone():
     assert payload["phone"] == "0917777777"
     assert payload["fraud_report_count"] >= 1
     assert payload["risk_level"] in {"LOW", "MODERATE", "HIGH", "CRITICAL"}
+
+def test_recipient_summary_ignores_previous_transaction_assessment():
+    reset_db()
+    recipient_phone = "0917777788"
+    register_user(recipient_phone, "Recipient")
+    create_account_for_phone(recipient_phone)
+
+    db = session_module.SessionLocal()
+    try:
+        db.add(
+            RiskAssessment(
+                recipient_phone=recipient_phone,
+                score=99,
+                level="CRITICAL",
+                recommendation="STOP_AND_VERIFY",
+            )
+        )
+        db.commit()
+    finally:
+        db.close()
+
+    token = login_user(recipient_phone)
+    response = client.get(
+        f"/recipients/{recipient_phone}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["fraud_report_count"] == 0
+    assert payload["risk_score"] < 99
+    assert payload["risk_level"] != "CRITICAL"
 
 
 def test_recipient_summary_missing_phone_returns_404():

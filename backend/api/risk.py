@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from backend.auth.security import get_current_user
 from backend.database.session import get_db
+from backend.rate_limiter import limiter
 from backend.models.payment_account import PaymentAccount
 from backend.models.risk_assessment import RiskAssessment
 from backend.models.user import User
@@ -17,12 +18,14 @@ router = APIRouter(prefix="/risk", tags=["Risk"])
 
 
 @router.post("/check", response_model=RiskCheckResponse)
+@limiter.limit("10/minute")
 def check_risk(
-    request: RiskCheckRequest,
+    request: Request,
+    risk_request: RiskCheckRequest,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    recipient_user = db.query(User).filter(User.phone == request.recipient_phone).first()
+    recipient_user = db.query(User).filter(User.phone == risk_request.recipient_phone).first()
     if recipient_user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -40,7 +43,7 @@ def check_risk(
             detail="Recipient account not found",
         )
 
-    intelligence = get_recipient_intelligence(db, request.recipient_phone)
+    intelligence = get_recipient_intelligence(db, risk_request.recipient_phone)
 
     result = calculate_risk(
         report_count=intelligence["total_reports"],
@@ -49,12 +52,12 @@ def check_risk(
         suspicious_connection_count=intelligence["suspicious_relationships"],
         independent_report_count=intelligence["independent_reporters"],
         repeated_scam_pattern=intelligence["repeated_scam_pattern"],
-        unusual_transaction=(request.amount >= 5000),
-        transaction_amount=float(request.amount),
+        unusual_transaction=(risk_request.amount >= 5000),
+        transaction_amount=float(risk_request.amount),
     )
 
     assessment = RiskAssessment(
-        recipient_phone=request.recipient_phone,
+        recipient_phone=risk_request.recipient_phone,
         score=result["score"],
         level=result["level"],
         recommendation=result["recommendation"],
@@ -66,7 +69,7 @@ def check_risk(
     if result["level"] in {"HIGH", "CRITICAL"}:
         create_alert(
             db,
-            recipient_phone=request.recipient_phone,
+            recipient_phone=risk_request.recipient_phone,
             severity=result["level"],
             message="High-risk recipient requires analyst review.",
             risk_assessment_id=assessment.id,

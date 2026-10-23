@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from backend.rate_limiter import limiter
 
 from backend.api.admin import router as admin_router
 from backend.api.alerts import router as alerts_router
@@ -10,6 +13,8 @@ from backend.api.risk import router as risk_router
 from backend.api.transactions import router as transactions_router
 
 app = FastAPI(title="Adera API")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.include_router(auth_router)
 app.include_router(risk_router)

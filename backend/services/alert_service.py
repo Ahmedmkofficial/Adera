@@ -9,12 +9,16 @@ def create_alert(db: Session, recipient_phone: str, severity: str, message: str,
         .filter(
             Alert.recipient_phone == recipient_phone,
             Alert.severity == severity,
-            Alert.risk_assessment_id == risk_assessment_id,
             Alert.status.in_({"OPEN", "INVESTIGATING"}),
         )
         .first()
     )
     if existing:
+        if existing.risk_assessment_id != risk_assessment_id:
+            existing.risk_assessment_id = risk_assessment_id
+            existing.message = message
+            db.commit()
+            db.refresh(existing)
         return existing
 
     alert = Alert(

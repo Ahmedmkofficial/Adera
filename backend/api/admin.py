@@ -1,12 +1,17 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from backend.auth.security import require_roles
 from backend.database.session import get_db
 from backend.models.alert import Alert
 from backend.models.fraud_report import FraudReport
 from backend.services.risk_engine import calculate_risk
 
-router = APIRouter(prefix="/admin", tags=["Admin"])
+router = APIRouter(
+    prefix="/admin",
+    tags=["Admin"],
+    dependencies=[Depends(require_roles("ANALYST", "ADMIN"))],
+)
 
 
 @router.get("/reports")

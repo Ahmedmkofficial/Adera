@@ -1,11 +1,8 @@
-from datetime import datetime, timedelta
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from backend.auth.security import get_current_user
 from backend.database.session import get_db
-from backend.models.risk_assessment import RiskAssessment
 from backend.models.user import User
 from backend.schemas.recipient import RecipientSummary
 from backend.services.fraud_intelligence import get_recipient_intelligence
@@ -21,11 +18,17 @@ def get_recipient_summary(
     current_user: User = Depends(get_current_user),
 ):
     if not phone:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Recipient phone is required")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Recipient phone is required",
+        )
 
     user = db.query(User).filter(User.phone == phone).first()
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Recipient not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Recipient not found",
+        )
 
     intelligence = get_recipient_intelligence(db, phone)
 
@@ -39,21 +42,6 @@ def get_recipient_summary(
         unusual_transaction=False,
         transaction_amount=0,
     )
-
-    latest_assessment = (
-        db.query(RiskAssessment)
-        .filter(RiskAssessment.recipient_phone == phone)
-        .order_by(RiskAssessment.id.desc())
-        .first()
-    )
-
-    if latest_assessment is not None:
-        risk_result = {
-            "score": latest_assessment.score,
-            "level": latest_assessment.level,
-            "recommendation": latest_assessment.recommendation,
-            "reasons": ["Existing risk assessment"],
-        }
 
     return {
         "phone": phone,
