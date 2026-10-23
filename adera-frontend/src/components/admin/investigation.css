@@ -1,0 +1,157 @@
+/* ---------- Layout: sticky summary + scrolling detail ---------- */
+.iv {
+  max-width: 1180px;
+  padding: 40px 40px 64px;
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 64px;
+  animation: ad-enter 420ms var(--ease) both;
+}
+.iv-summary {
+  position: sticky;
+  top: 104px; /* below the 64px top bar */
+  align-self: start;
+}
+.iv-summary h1 {
+  margin: 10px 0 0;
+  font-size: 34px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.iv-recipient { margin: 10px 0 0; font-size: 17px; }
+
+.iv-score {
+  margin-top: 36px;
+  color: var(--lvl-text, var(--lvl));
+  font-size: 96px;
+  line-height: 0.9;
+  font-weight: 200;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+}
+.iv-score span {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.iv-level { margin-top: 10px; color: var(--lvl-text, var(--lvl)); font-size: 22px; font-weight: 600; }
+
+.iv-summary .rk-ruler { margin-top: 12px; }
+.iv-reco { padding: 18px 0 24px; display: grid; gap: 6px; font-size: 14px; }
+.iv-reco span { color: var(--muted); }
+.iv-reco strong { font-size: 17px; font-weight: 600; }
+.iv-reco code { color: var(--muted); font-size: 12px; }
+
+.iv-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.iv-entity-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+/* ---------- Detail column ---------- */
+.iv-lead {
+  margin: 10px 0 0;
+  max-width: 560px;
+  font-size: 34px;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.iv-thread { position: relative; margin-top: 48px; padding-left: 34px; }
+.iv-thread::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 3px;
+  width: 1px;
+  background: var(--border);
+}
+.iv-section { position: relative; padding-bottom: 52px; animation: ad-enter 380ms var(--ease) both; }
+.iv-section:nth-child(2) { animation-delay: 50ms; }
+.iv-section:nth-child(3) { animation-delay: 100ms; }
+.iv-section:nth-child(4) { animation-delay: 150ms; }
+.iv-section:last-child { padding-bottom: 0; }
+.iv-section-node {
+  position: absolute;
+  left: -34px;
+  top: 9px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 4px var(--paper);
+}
+.iv-section h3 {
+  margin: 0 0 18px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+/* the thread list sits on paper here, not on a white sheet */
+.iv-section .rk-node { box-shadow: 0 0 0 3px var(--paper); }
+.iv-section .rk-thread li { font-size: 17px; line-height: 22px; min-height: 36px; }
+.iv-section .rk-node { margin-top: 7px; }
+
+/* ---------- Transactions ---------- */
+.iv-table { overflow-x: auto; }
+.iv-tr {
+  display: grid;
+  grid-template-columns: 130px 130px 120px minmax(120px, 1fr);
+  gap: 16px;
+  align-items: center;
+  min-width: 540px;
+  min-height: 46px;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 14px;
+}
+.iv-tr-head {
+  min-height: 34px;
+  color: var(--muted);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Reports ---------- */
+.iv-count { margin: -6px 0 14px; font-size: 13px; }
+.iv-report { margin: 0 0 16px; font-size: 15px; line-height: 22px; }
+.iv-report .mono { display: block; margin-bottom: 2px; color: var(--muted); font-size: 12px; }
+
+/* ---------- Related accounts ---------- */
+.iv-rel { margin: 0; padding: 0; list-style: none; }
+.iv-rel li {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  min-height: 46px;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 14px;
+}
+.iv-rel a { color: var(--ink); }
+.iv-rel-level { color: var(--lvl-text, var(--lvl)); font-weight: 600; }
+
+.iv-notfound {
+  margin: 0 0 12px;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* ---------- Narrow windows ---------- */
+@media (max-width: 1000px) {
+  .iv { grid-template-columns: minmax(0, 1fr); gap: 48px; padding: 28px 20px 48px; }
+  .iv-summary { position: static; }
+}

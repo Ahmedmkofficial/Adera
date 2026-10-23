@@ -96,6 +96,13 @@ def test_recipient_summary_reports_relationship_and_independent_reports():
         )
         assert response.status_code == 200
 
+    db = session_module.SessionLocal()
+    try:
+        user = db.query(User).filter(User.phone == recipient_phone).first()
+        user.role = "ANALYST"
+        db.commit()
+    finally:
+        db.close()
     token = login_user(recipient_phone)
     response = client.get(
         f"/recipients/{recipient_phone}",

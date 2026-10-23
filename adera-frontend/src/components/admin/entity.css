@@ -1,0 +1,146 @@
+/* text for screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Profile heading ---------- */
+.ent-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.ent-phone {
+  margin: 10px 0 0;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+.ent-meta { margin: 14px 0 0; color: var(--muted); font-size: 14px; }
+.ent-score { color: var(--lvl-text, var(--lvl)); text-align: right; }
+.ent-score strong {
+  font-size: 96px;
+  line-height: 0.9;
+  font-weight: 200;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+}
+.ent-of { margin-left: 6px; color: var(--muted); font-size: 17px; }
+.ent-level { margin-top: 8px; font-size: 17px; font-weight: 600; }
+
+.ent-stats .op-metric strong { font-size: 40px; }
+
+/* ---------- Tabs and panels ---------- */
+.ent-tabs { margin-top: 48px; overflow-x: auto; padding-bottom: 4px; }
+.ent-panel { margin-top: 36px; max-width: 860px; }
+.ent-panel-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.ent-panel-head h2 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.ent-panel-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.ent-current { text-align: right; color: var(--lvl-text, var(--lvl)); }
+.ent-current strong { display: block; font-size: 34px; line-height: 1; font-weight: 300; }
+.ent-current small { color: var(--muted); font-size: 13px; }
+
+/* thread list sits on paper here, not on a white sheet */
+.ent-panel .rk-node { box-shadow: 0 0 0 3px var(--paper); margin-top: 7px; }
+.ent-panel .rk-thread li { min-height: 36px; font-size: 17px; line-height: 22px; }
+
+.ent-reco {
+  margin-top: 28px;
+  padding-top: 16px;
+  display: grid;
+  gap: 6px;
+  border-top: 0.5px solid var(--border);
+  font-size: 14px;
+}
+.ent-reco span { color: var(--muted); }
+.ent-reco strong { font-size: 17px; font-weight: 600; }
+.ent-reco code { color: var(--muted); font-size: 12px; }
+
+/* ---------- Cases tab ---------- */
+.ent-cases { margin: 0; padding: 0; list-style: none; }
+.ent-cases li {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 15px;
+}
+.ent-cases a { color: var(--ink); }
+
+/* ---------- Risk chart ---------- */
+.ent-chart {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+}
+.ent-ylabels { position: relative; }
+.ent-ylabels span {
+  position: absolute;
+  right: 10px;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+}
+.ent-plot { aspect-ratio: 1000 / 320; }
+.ent-plot svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ent-gridline {
+  stroke: var(--border);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.ent-line {
+  fill: none;
+  stroke: var(--lvl);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.ent-end { fill: var(--lvl); stroke: var(--paper); stroke-width: 4; }
+.ent-xlabels {
+  grid-column: 2;
+  position: relative;
+  height: 20px;
+  margin-top: 14px;
+}
+.ent-xlabels span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  color: var(--muted);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* ---------- Entities search page ---------- */
+.ent-search { margin-top: 36px; max-width: 360px; display: grid; gap: 20px; }
+.ent-search .op-error { padding: 0; }
+.ent-known-row {
+  grid-template-columns: 150px 210px minmax(200px, 1fr);
+  min-width: 600px;
+}
+
+@media (max-width: 860px) {
+  .ent-phone { font-size: 36px; }
+  .ent-score strong { font-size: 72px; }
+}

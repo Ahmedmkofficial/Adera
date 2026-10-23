@@ -50,6 +50,17 @@ def login_user(phone, password="secret123"):
     return response.json()["access_token"]
 
 
+def make_analyst(phone):
+    db = session_module.SessionLocal()
+    try:
+        user = db.query(User).filter(User.phone == phone).first()
+        user.role = "ANALYST"
+        db.commit()
+    finally:
+        db.close()
+    return login_user(phone)
+
+
 def create_account_for_phone(phone):
     db = session_module.SessionLocal()
     try:
@@ -336,7 +347,8 @@ def test_recipient_summary_returns_data_for_existing_phone():
     create_account_for_phone("0917777777")
     reporter_phone = "0918888888"
     register_user(reporter_phone, "Reporter")
-    token = login_user(reporter_phone)
+    recipient_token = make_analyst(reporter_phone)
+    token = recipient_token
 
     client.post(
         "/reports",
@@ -348,7 +360,6 @@ def test_recipient_summary_returns_data_for_existing_phone():
         },
     )
 
-    recipient_token = login_user("0917777777")
     response = client.get(
         "/recipients/0917777777",
         headers={"Authorization": f"Bearer {recipient_token}"},
@@ -380,7 +391,9 @@ def test_recipient_summary_ignores_previous_transaction_assessment():
     finally:
         db.close()
 
-    token = login_user(recipient_phone)
+    analyst_phone = "0917777789"
+    register_user(analyst_phone, "Analyst")
+    token = make_analyst(analyst_phone)
     response = client.get(
         f"/recipients/{recipient_phone}",
         headers={"Authorization": f"Bearer {token}"},
@@ -396,7 +409,7 @@ def test_recipient_summary_ignores_previous_transaction_assessment():
 def test_recipient_summary_missing_phone_returns_404():
     reset_db()
     register_user("0911111111", "User")
-    token = login_user("0911111111")
+    token = make_analyst("0911111111")
 
     response = client.get(
         "/recipients/0919999999",

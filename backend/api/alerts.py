@@ -4,9 +4,15 @@ from sqlalchemy.orm import Session
 from backend.auth.security import get_current_user, require_roles
 from backend.database.session import get_db
 from backend.models.alert import Alert
+from backend.models.fraud_report import FraudReport
+from backend.models.payment_account import PaymentAccount
+from backend.models.relationship import AccountRelationship
 from backend.models.risk_assessment import RiskAssessment
+from backend.models.scam_case import ScamCase
+from backend.models.transaction import Transaction
 from backend.models.user import User
 from backend.services.alert_service import get_alert, list_alerts, update_alert_status
+from backend.services.recipient_graph import build_recipient_graph
 
 router = APIRouter(prefix="/alerts", tags=["Alerts"])
 
@@ -39,6 +45,7 @@ def get_alerts(
                     if alert.risk_assessment_id is not None
                     else None
                 ),
+                "message": alert.message,
                 "created_at": alert.created_at,
             }
         )
@@ -61,6 +68,53 @@ def get_alert_detail(
             db.query(RiskAssessment).filter(RiskAssessment.id == alert.risk_assessment_id).first()
         )
 
+    reports = (
+        db.query(FraudReport)
+        .filter(FraudReport.recipient_phone == alert.recipient_phone)
+        .order_by(FraudReport.created_at.desc())
+        .all()
+    )
+    transactions = (
+        db.query(Transaction)
+        .filter(Transaction.recipient_phone == alert.recipient_phone)
+        .order_by(Transaction.created_at.desc())
+        .limit(10)
+        .all()
+    )
+    sender_ids = {transaction.sender_id for transaction in transactions}
+    senders = (
+        {
+            user.id: user.phone
+            for user in db.query(User).filter(User.id.in_(sender_ids)).all()
+        }
+        if sender_ids
+        else {}
+    )
+    recipient = db.query(User).filter(User.phone == alert.recipient_phone).first()
+    graph = build_recipient_graph(db, recipient) if recipient else None
+    related_accounts = []
+    if graph:
+        account_nodes = {
+            node["id"]: node for node in graph["nodes"] if node["kind"] == "account"
+        }
+        related_accounts = [
+            {
+                "phone": node["phone"],
+                "relation": edge["type"],
+                "level": node["level"],
+            }
+            for edge in graph["edges"]
+            if edge["type"] != "REPORT"
+            for node in [account_nodes.get(edge["target"] if edge["source"].startswith("subject-") else edge["source"])]
+            if node is not None
+        ]
+    case_id = (
+        db.query(ScamCase.id)
+        .filter(ScamCase.alert_id == alert.id)
+        .order_by(ScamCase.id.desc())
+        .scalar()
+    )
+
     return {
         "alert": {
             "id": alert.id,
@@ -81,6 +135,28 @@ def get_alert_detail(
             if risk_assessment is not None
             else None
         ),
+        "reasons": [alert.message] if alert.message else [],
+        "transactions": [
+            {
+                "id": transaction.id,
+                "created_at": transaction.created_at,
+                "counterparty": senders.get(transaction.sender_id),
+                "amount": float(transaction.amount),
+            }
+            for transaction in transactions
+        ],
+        "reports_total": len(reports),
+        "reports": [
+            {
+                "id": report.id,
+                "created_at": report.created_at,
+                "scam_type": report.scam_type,
+                "summary": report.description,
+            }
+            for report in reports[:5]
+        ],
+        "related_accounts": related_accounts,
+        "case_id": case_id,
     }
 
 

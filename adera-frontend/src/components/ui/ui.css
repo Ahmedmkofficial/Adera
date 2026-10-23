@@ -1,0 +1,100 @@
+/* ---------- Button ---------- */
+.ad-btn {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 999px;
+  border: 0.5px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  transition: transform 160ms var(--ease), opacity 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease), box-shadow 160ms var(--ease);
+}
+.ad-btn-primary:hover:not(:disabled) { background: #34363a; box-shadow: 0 4px 12px rgba(28, 28, 30, .12); }
+.ad-btn-secondary:hover:not(:disabled) { background: rgba(28, 28, 30, .045); }
+.ad-btn:active { transform: scale(0.985); }
+.ad-btn:focus-visible { outline: 2px solid #426b59; outline-offset: 3px; }
+.ad-btn:disabled { opacity: 0.48; cursor: not-allowed; box-shadow: none; }
+
+.ad-btn-primary { color: #fff; background: var(--ink); }
+.ad-btn-secondary { color: var(--ink); background: transparent; border-color: var(--ink); }
+.ad-btn-tertiary {
+  min-height: 38px;
+  color: var(--muted);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 400;
+}
+.ad-btn-tertiary:hover { text-decoration: underline; }
+
+/* ---------- Field ---------- */
+.ad-field { display: block; }
+.ad-field-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+}
+.ad-field-input {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid #a8aaa8;
+  border-radius: 0;
+  outline: none;
+  color: var(--ink);
+  background: transparent;
+  font: inherit;
+  font-size: 17px;
+  transition: box-shadow 180ms var(--ease);
+}
+.ad-field-input:focus-visible {
+  outline: none;
+  border-color: #426b59;
+  box-shadow: 0 1.5px 0 0 #426b59;
+}
+.ad-field-input.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+}
+.ad-field-input::placeholder { color: var(--muted); }
+
+
+/* ---------- Segmented control ---------- */
+.ad-seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(28, 28, 30, 0.06);
+}
+.ad-seg button {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0.5px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 180ms var(--ease), background 180ms var(--ease);
+}
+.ad-seg button:hover { color: var(--ink); }
+.ad-seg button[aria-pressed="true"] {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--ink);
+  font-weight: 600;
+}
+.ad-seg button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+@media (max-width: 600px) {
+  .ad-btn { min-height: 50px; }
+  .ad-seg { max-width: 100%; overflow-x: auto; }
+  .ad-seg button { flex: 0 0 auto; min-height: 40px; }
+}

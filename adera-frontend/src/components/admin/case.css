@@ -1,0 +1,158 @@
+/* ---------- Case list ---------- */
+.cs-row {
+  grid-template-columns: 90px 100px 140px 210px minmax(160px, 1fr) 110px;
+  min-width: 860px;
+}
+
+/* ---------- Case page header ---------- */
+.cs-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.cs-kicker { display: flex; align-items: center; gap: 20px; font-size: 13px; }
+.cs-kicker .mono { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; }
+.cs-head h1 {
+  margin: 12px 0 0;
+  font-size: 56px;
+  line-height: 1;
+  font-weight: 300;
+  letter-spacing: -0.035em;
+}
+.cs-links { display: grid; gap: 8px; justify-items: end; font-size: 14px; }
+.cs-links a { color: var(--ink); }
+
+/* ---------- Three columns: history | evidence | decision ---------- */
+.cs-cols {
+  margin-top: 48px;
+  padding-top: 32px;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 300px;
+  gap: 56px;
+  align-items: start;
+  border-top: 0.5px solid var(--border);
+}
+
+/* shared node dot */
+.cs-node {
+  position: absolute;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--paper);
+}
+
+/* ---------- Timeline (the thread) ---------- */
+.cs-timeline { position: relative; margin: 20px 0 0; padding: 0; list-style: none; }
+.cs-timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 3px;
+  width: 1px;
+  background: var(--border);
+}
+.cs-timeline li { position: relative; padding: 0 0 30px 26px; }
+.cs-timeline li:last-child { padding-bottom: 0; }
+.cs-timeline .cs-node { top: 5px; background: var(--lvl, var(--ink)); }
+.cs-timeline time { display: block; color: var(--muted); font-size: 11px; letter-spacing: 0.04em; }
+.cs-timeline h3 { margin: 6px 0 4px; font-size: 15px; font-weight: 600; }
+.cs-timeline p { margin: 0; color: var(--muted); font-size: 14px; line-height: 20px; }
+
+/* ---------- Evidence ---------- */
+.cs-evidence h2 { margin: 10px 0 28px; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.cs-evidence-list { position: relative; margin: 0; padding: 0; list-style: none; }
+.cs-evidence-list::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 3px;
+  width: 1px;
+  background: var(--border);
+}
+.cs-evidence-list li {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 0 0 22px 26px;
+  font-size: 15px;
+}
+.cs-evidence-list .cs-node { top: 18px; background: var(--lvl, var(--border)); }
+.cs-evidence-list strong {
+  min-width: 56px;
+  color: var(--lvl, var(--ink));
+  font-size: 40px;
+  line-height: 1;
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.cs-payment {
+  margin-top: 28px;
+  padding-top: 18px;
+  display: grid;
+  gap: 6px;
+  border-top: 0.5px solid var(--border);
+}
+.cs-payment strong { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+.cs-payment .mono { color: var(--muted); font-size: 12px; }
+
+/* ---------- Decision panel ---------- */
+.cs-decision {
+  position: sticky;
+  top: 96px;
+  padding-left: 32px;
+  border-left: 0.5px solid var(--border);
+}
+.cs-decision h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  outline: none;
+}
+.cs-note, .cs-note-plain { margin: 16px 0 0; color: var(--muted); font-size: 14px; line-height: 20px; }
+.cs-note { padding: 12px 0; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+.cs-facts { margin: 24px 0 0; border-top: 0.5px solid var(--border); }
+.cs-facts div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 14px;
+}
+.cs-facts dt { color: var(--muted); }
+.cs-facts dd { margin: 0; display: grid; gap: 4px; justify-items: end; text-align: right; }
+.cs-facts code { color: var(--muted); font-size: 12px; }
+.cs-lvl { color: var(--lvl-text, var(--lvl)); font-weight: 600; }
+.cs-actions { margin-top: 28px; display: grid; gap: 8px; }
+.cs-error { padding: 12px 0 0; font-size: 14px; }
+
+/* the quiet monospace stamp */
+.cs-stamp {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Narrow windows ---------- */
+@media (max-width: 1100px) {
+  .cs-cols { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .cs-decision { position: static; order: -1; padding-left: 0; border-left: 0; }
+  .cs-head h1 { font-size: 40px; }
+}
+/* a real heading that looks like the small label above the other columns */
+.cs-eyebrow-h { font-weight: 400; }

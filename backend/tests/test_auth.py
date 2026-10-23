@@ -58,6 +58,30 @@ def test_health_check():
     assert response.json() == {"status": "ok"}
 
 
+def test_cors_allows_configured_local_frontend_and_rejects_other_origins():
+    allowed = client.options(
+        "/auth/login",
+        headers={
+            "Origin": "http://localhost:5173",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "authorization,content-type",
+        },
+    )
+    assert allowed.status_code == 200
+    assert allowed.headers["access-control-allow-origin"] == "http://localhost:5173"
+
+    rejected = client.options(
+        "/auth/login",
+        headers={
+            "Origin": "https://untrusted.example",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "authorization,content-type",
+        },
+    )
+    assert rejected.status_code == 400
+    assert "access-control-allow-origin" not in rejected.headers
+
+
 def test_register_success():
     reset_db()
     payload = {"phone": "0911111111", "name": "Alice", "password": "secret123"}
