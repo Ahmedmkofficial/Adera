@@ -440,7 +440,7 @@ adera/
 │   ├── services/
 │   └── tests/
 │
-├── frontend/
+├── adera-frontend/
 │   └── src/
 │       ├── components/
 │       ├── pages/

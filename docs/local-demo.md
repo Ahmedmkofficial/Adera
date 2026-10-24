@@ -40,7 +40,7 @@ backend/.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port 8000
 In terminal 2:
 
 ```sh
-cd frontend
+cd adera-frontend
 npm run dev -- --host 127.0.0.1
 ```
 

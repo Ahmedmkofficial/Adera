@@ -36,11 +36,12 @@ def reset_db():
     Base.metadata.create_all(bind=session_module.engine)
 
 
-def create_privileged_user(phone, role):
+def create_privileged_user(phone, role, username=None):
     db = session_module.SessionLocal()
     try:
         user = User(
             phone=phone,
+            username=username,
             name=f"Test {role.title()}",
             password_hash=get_password_hash("secret123"),
             role=role,
@@ -149,6 +150,54 @@ def test_login_success():
     assert body["user"]["phone"] == "0911111111"
     assert body["user"]["role"] == "USER"
     assert "password_hash" not in body["user"]
+
+
+def test_staff_can_login_with_case_insensitive_username_and_keep_role_authorization():
+    reset_db()
+    create_privileged_user("0911111111", "ANALYST", username="case.agent")
+
+    response = client.post(
+        "/auth/login",
+        json={"username": "CASE.AGENT", "password": "secret123"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["user"]["username"] == "case.agent"
+    assert body["user"]["role"] == "ANALYST"
+    analyst_response = client.get(
+        "/auth/analyst-only",
+        headers={"Authorization": f"Bearer {body['access_token']}"},
+    )
+    assert analyst_response.status_code == 200
+    assert analyst_response.json()["message"] == "Access granted"
+
+
+def test_username_login_is_staff_only_and_rejects_invalid_identifier_fields():
+    reset_db()
+    client.post(
+        "/auth/register",
+        json={"phone": "0911111111", "name": "Alice", "password": "secret123"},
+    )
+    db = session_module.SessionLocal()
+    try:
+        customer = db.query(User).filter(User.phone == "0911111111").first()
+        customer.username = "alice.user"
+        db.commit()
+    finally:
+        db.close()
+
+    login = client.post(
+        "/auth/login",
+        json={"username": "alice.user", "password": "secret123"},
+    )
+    assert login.status_code == 401
+
+    for payload in (
+        {"username": "ab", "password": "secret123"},
+        {"username": "alice.user", "phone": "0911111111", "password": "secret123"},
+    ):
+        assert client.post("/auth/login", json=payload).status_code == 422
 
 
 def test_login_incorrect_password():

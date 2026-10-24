@@ -22,7 +22,7 @@ def test_migration_chain_has_one_head_and_generates_fresh_schema(monkeypatch):
     config.set_main_option("sqlalchemy.url", "sqlite:///wrong-target.sqlite")
     script = ScriptDirectory.from_config(config)
 
-    assert script.get_heads() == ["7b8c9d0e1f2a"]
+    assert script.get_heads() == ["3a4b5c6d7e8f"]
 
     command.upgrade(config, "head", sql=True)
     sql = output.getvalue()
@@ -51,3 +51,5 @@ def test_migration_chain_has_one_head_and_generates_fresh_schema(monkeypatch):
     assert "FOREIGN KEY(risk_assessment_id) REFERENCES risk_assessments (id)" in sql
     assert "FOREIGN KEY(alert_id) REFERENCES alerts (id)" in sql
     assert "FOREIGN KEY(analyst_id) REFERENCES users (id)" in sql
+    assert "username VARCHAR(32)" in sql
+    assert "lower(username)" in sql

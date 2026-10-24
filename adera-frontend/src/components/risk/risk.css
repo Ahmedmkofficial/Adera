@@ -13,7 +13,7 @@
 }
 .rk-dot {
   position: absolute; top: -5px; width: 9px; height: 9px; margin-left: -4px;
-  border-radius: 50%; background: var(--lvl); box-shadow: 0 0 0 4px #fff;
+  border-radius: 50%; background: var(--lvl); box-shadow: 0 0 0 4px var(--surface);
 }
 .rk-labels {
   display: flex; justify-content: space-between; margin-top: 4px;
@@ -34,7 +34,7 @@
 .rk-node {
   position: relative; z-index: 1; flex: 0 0 auto; width: 7px; height: 7px;
   margin-top: 5px; border-radius: 50%; background: var(--lvl);
-  box-shadow: 0 0 0 3px #fff;
+  box-shadow: 0 0 0 3px var(--surface);
 }
 
 /* ---------- Sheet ---------- */
@@ -71,6 +71,7 @@
   font-size: 72px; line-height: 0.85; font-weight: 200;
   letter-spacing: -0.05em; color: var(--lvl-text, var(--lvl));
 }
+.rk-dot, .rk-node { transition: background 180ms var(--ease), box-shadow 180ms var(--ease); }
 .rk-score span {
   margin-left: 4px; color: var(--muted); font-size: 15px;
   font-weight: 400; letter-spacing: 0;

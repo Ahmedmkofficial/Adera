@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import LogoMark from '../LogoMark'
 import SkipLink from '../SkipLink'
+import ThemeToggle from '../ThemeToggle'
 import './customer.css'
 
 // back: show a back arrow (the logo moves to the right).
 // mark: show the logo in the top bar (turned off on sign-in pages, which show it large).
-export default function CustomerShell({ back = false, mark = true, children }) {
+export default function CustomerShell({ back = false, mark = true, className = '', children }) {
   const navigate = useNavigate()
   return (
     <div className="cu-shell">
@@ -21,8 +22,9 @@ export default function CustomerShell({ back = false, mark = true, children }) {
           <span />
         )}
         {back && <LogoMark size={26} title="Adera" />}
+        <ThemeToggle />
       </header>
-      <main id="main" tabIndex={-1} className="cu-content">{children}</main>
+      <main id="main" tabIndex={-1} className={`cu-content ${className}`.trim()}>{children}</main>
     </div>
   )
 }

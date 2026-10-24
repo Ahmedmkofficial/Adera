@@ -1,16 +1,24 @@
 .cu-shell {
   width: 100%;
-  max-width: 430px;
+  max-width: 520px;
   min-height: 100dvh;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: var(--paper);
+  overflow: hidden;
+  border-inline: 1px solid var(--border);
+  background:
+    linear-gradient(rgba(31, 161, 180, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 161, 180, .035) 1px, transparent 1px),
+    linear-gradient(155deg, var(--surface), var(--paper) 64%);
+  background-size: 32px 32px, 32px 32px, auto;
+  box-shadow: var(--shadow-soft);
 }
 @media (min-width: 500px) {
   .cu-shell {
-    border-left: 0.5px solid var(--border);
-    border-right: 0.5px solid var(--border);
+    margin-block: 20px;
+    min-height: calc(100dvh - 40px);
+    border-radius: 24px;
   }
 }
 
@@ -34,6 +42,7 @@
   cursor: pointer;
 }
 .cu-back:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.cu-topbar .ad-theme-toggle { margin-left: auto; }
 
 .cu-content {
   flex: 1;
@@ -59,10 +68,98 @@
   letter-spacing: 0.08em;
   color: var(--muted);
 }
-.cu-form { margin-top: auto; }
-.cu-fields { display: grid; gap: 24px; margin-bottom: 36px; }
+.cu-form {
+  margin-top: 38px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+.cu-form .ad-btn-primary { min-height: 52px; }
 .cu-form .ad-btn-tertiary { margin-top: 8px; }
+.cu-fields { display: grid; gap: 24px; margin-bottom: 36px; }
 .cu-error { margin: -16px 0 20px; font-size: 13px; font-weight: 500; }
+.cu-login-content .cu-wordmark {
+  animation: cu-login-reveal 460ms var(--ease) both;
+}
+.cu-login-content .cu-wordmark-mark {
+  transform-origin: center;
+  animation: cu-login-mark 620ms var(--ease) both;
+}
+.cu-login-content .cu-login-form {
+  animation: cu-login-reveal 520ms var(--ease) 60ms both;
+}
+.cu-login-title {
+  margin: 0 0 24px;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+.cu-login-kicker {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .12em;
+}
+.cu-login-staff-link {
+  display: block;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.cu-login-staff-link:hover { color: var(--accent); }
+.cu-login-link { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+@keyframes cu-login-reveal {
+  from { opacity: .72; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cu-login-mark {
+  from { opacity: .72; transform: scale(.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+.cu-login-logo-animating .cu-wordmark {
+  animation: none;
+}
+.cu-login-logo-animating .cu-wordmark-mark {
+  animation: none;
+}
+.cu-login-logo-animating .ad-login-logo-ridge {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cu-login-logo-draw 780ms ease-out both;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-center {
+  animation-delay: 0ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-core {
+  animation-delay: 180ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-mid {
+  animation-delay: 360ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-outer {
+  animation-delay: 540ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-side {
+  animation-delay: 720ms;
+}
+.cu-login-logo-animating .cu-login-form {
+  opacity: 0;
+  animation: cu-login-form-reveal 400ms var(--ease) 1.85s both;
+}
+@keyframes cu-login-logo-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes cu-login-form-reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* ---------- Send money ---------- */
 .cu-title {
@@ -195,6 +292,7 @@
   .cu-wordmark-latin { font-size: 48px; }
   .cu-title { font-size: 30px; }
   .cu-amount { margin: 48px 0 40px; }
+  .cu-form { padding: 18px; }
 }
 /* ---------- Auth extras ---------- */
 .cu-content:focus { outline: none; }
@@ -226,3 +324,28 @@
 
 /* the logo above the sign-in wordmark */
 .cu-wordmark-mark { display: block; margin-bottom: 22px; }
+.cu-wordmark-mark { color: var(--accent); }
+.cu-wordmark-latin { color: var(--ink); font-weight: 500; letter-spacing: -.055em; }
+.cu-wordmark-ethiopic { color: var(--accent); }
+
+.cu-title { color: var(--ink); }
+.cu-amount {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 16px 17px;
+  background: var(--surface);
+  box-shadow: 0 10px 28px rgba(18, 91, 111, .06);
+}
+.cu-amount:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 10px 28px rgba(18, 91, 111, .06);
+}
+.cu-type { border-bottom-color: var(--border); }
+.cu-type.is-on .cu-type-node { background: var(--accent); }
+.cu-textarea { border: 1px solid var(--border); border-radius: 11px; padding: 12px; background: var(--field); }
+.cu-textarea:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.cu-confirm-icon path { stroke: var(--accent); }
+
+@media (max-width: 499px) {
+  .cu-shell { border-inline: 0; }
+}

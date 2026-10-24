@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from backend.database.session import get_db
@@ -43,7 +44,15 @@ def register_user(request: Request, user_data: UserRegister, db: Session = Depen
 @router.post("/login", response_model=TokenResponse)
 @limiter.limit("5/minute")
 def login_user(request: Request, user_data: UserLogin, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.phone == user_data.phone).first()
+    if user_data.phone is not None:
+        user = db.query(User).filter(User.phone == user_data.phone).first()
+    else:
+        user = (
+            db.query(User)
+            .filter(func.lower(User.username) == user_data.username)
+            .filter(User.role.in_(("ANALYST", "ADMIN")))
+            .first()
+        )
 
     if not user or not verify_password(user_data.password, user.password_hash):
         raise HTTPException(

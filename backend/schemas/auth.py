@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 def _validate_bcrypt_password_length(password: str) -> str:
@@ -19,8 +19,22 @@ class UserRegister(BaseModel):
 
 
 class UserLogin(BaseModel):
-    phone: str
+    phone: str | None = None
+    username: str | None = Field(
+        default=None,
+        min_length=3,
+        max_length=32,
+        pattern=r"^[a-zA-Z][a-zA-Z0-9._-]{2,31}$",
+    )
     password: str
+
+    @model_validator(mode="after")
+    def exactly_one_identifier(self):
+        if (self.phone is None) == (self.username is None):
+            raise ValueError("provide either phone or username")
+        if self.username is not None:
+            self.username = self.username.strip().lower()
+        return self
 
     @field_validator("password")
     @classmethod
@@ -33,6 +47,7 @@ class UserPublic(BaseModel):
 
     id: int
     phone: str
+    username: str | None = None
     name: str
     role: str
 

@@ -27,7 +27,7 @@ It works with **no backend**: by default it answers from built-in demo data (`sr
 | Admin (analyst) | username `admin` | `admin` |
 | Customer | phone `0911000001` | `demo-customer-1` |
 
-The first sign-in box accepts a **phone number** (customers) or a **username** (staff). Usernames are not case-sensitive. The sign-in page does not display these details.
+Customers sign in at `/login` with their **phone number**. Analysts and admins use the separate `/analyst/login` page with their provisioned username or phone number. Usernames are not case-sensitive. Each page rejects credentials for the other role.
 
 > `admin` / `admin` is a default credential. It exists only in the built-in data and is **left out of the build** when `VITE_USE_MOCK=false`. A real backend must never ship it (see [docs/SECURITY.md](docs/SECURITY.md)).
 
@@ -59,7 +59,9 @@ VITE_USE_MOCK=false
 VITE_API_URL=http://localhost:8000
 ```
 
-Then restart `npm run dev`. All server calls live in **one file**, `src/services/api.js`, and follow [docs/API_CONTRACT.md](docs/API_CONTRACT.md). Pages never talk to the server directly, and the frontend never calculates risk: it only shows what the backend returns.
+Then restart `npm run dev`. Customers use `/login`; analysts and admins use `/analyst/login` with a staff phone number or a username assigned by a trusted operator. The backend's staff-username migration must be applied before using username login. All server calls live in **one file**, `src/services/api.js`, and follow [docs/API_CONTRACT.md](docs/API_CONTRACT.md). Pages never talk to the server directly, and the frontend never calculates risk: it only shows what the backend returns.
+
+The light/dark preference is shared across customer and analyst screens and is saved in browser storage. The fingerprint-shield mark is reused by the app UI and SVG favicon.
 
 For local development, configure the backend's `CORS_ALLOWED_ORIGINS` with the exact Vite origin if it differs from `http://localhost:5173` or `http://127.0.0.1:5173`.
 
@@ -84,7 +86,8 @@ src/
 
 | Address | Who | Screen |
 |---|---|---|
-| `/login`, `/register` | everyone | Sign in, create account |
+| `/login`, `/register` | customers | Sign in, create account |
+| `/analyst/login` | analysts/admins | Dedicated analyst sign in |
 | `/`, `/report`, `/confirmation/:type` | signed in | Send money, report, receipt |
 | `/admin` | analysts | Overview |
 | `/admin/alerts`, `/admin/alerts/:id` | analysts | Alert list, investigation |

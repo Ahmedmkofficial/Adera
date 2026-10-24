@@ -9,7 +9,8 @@ export default function ProtectedRoute({ role }) {
 
   if (!user) {
     const from = location.pathname + location.search
-    return <Navigate to="/login" replace state={{ from }} />
+    const loginPath = role === 'analyst' ? '/analyst/login' : '/login'
+    return <Navigate to={loginPath} replace state={{ from }} />
   }
   if (role && user.role !== role) return <Forbidden />
   return <Outlet />

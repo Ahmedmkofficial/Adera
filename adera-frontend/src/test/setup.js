@@ -20,6 +20,7 @@ window.scrollTo = () => {}
 
 beforeEach(() => {
   sessionStorage.clear()
+  localStorage.clear()
 })
 
 afterEach(() => {

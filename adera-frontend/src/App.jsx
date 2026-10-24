@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './auth/ProtectedRoute'
+import { useAuth } from './auth/useAuth'
 import RouteEffects from './components/RouteEffects'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -26,11 +27,14 @@ export default function App() {
       <Routes>
         {/* open to everyone */}
         <Route path="/login" element={<Login />} />
+        <Route path="/analyst/login" element={<Login analyst />} />
         <Route path="/register" element={<Register />} />
 
-        {/* any signed-in user */}
+        {/* Entry keeps first-time visitors on the login URL while the intro plays. */}
+        <Route path="/" element={<EntryPage />} />
+
+        {/* signed-in customers */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<UserPage />} />
           <Route path="/report" element={<ReportPage />} />
           <Route path="/confirmation/:type" element={<ConfirmationPage />} />
         </Route>
@@ -61,4 +65,11 @@ export default function App() {
       </Routes>
     </>
   )
+}
+
+function EntryPage() {
+  const { user } = useAuth()
+  if (!user) return <Login />
+  if (user.role === 'analyst') return <Navigate to="/admin" replace />
+  return <UserPage />
 }

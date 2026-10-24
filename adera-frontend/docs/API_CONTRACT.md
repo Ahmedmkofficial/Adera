@@ -17,10 +17,12 @@ General rules:
 
 | Call | Body | Response |
 |---|---|---|
-| `POST /auth/register` **(implemented)** | `{phone, name, password}` | `201` with `{id, phone, name, role}`. `400` if the phone exists. New accounts have role `USER`. |
-| `POST /auth/login` **(implemented)** | `{phone, password}` | `{access_token, token_type, user: {id, phone, name, role}}`. `401` for invalid credentials. The frontend maps `phone` to its username session field. Staff sign in with their registered phone number. |
+| `POST /auth/register` **(implemented)** | `{phone, name, password}` | `201` with `{id, phone, username, name, role}`; new accounts have `username: null` and role `USER`. `400` if the phone exists. |
+| `POST /auth/login` **(implemented)** | Customer or existing staff phone: `{phone, password}`. Provisioned staff username: `{username, password}`. | `{access_token, token_type, user: {id, phone, username, name, role}}`. `401` for invalid credentials. Username lookup is case-insensitive; phone login remains supported. |
 
-If `user` is missing, the frontend reads `sub` (the username), `name`, `role` and `exp` from the token's claims. `exp` is used only to end the screen session on time; the server must check it too.
+The staff `username` field is nullable and unique without regard to case. Public registration continues to create `USER` accounts and cannot select a username or privileged role. Existing analyst/admin accounts can continue using their phone number; a trusted operator must provision a username before that account can sign in by username. Apply the new Alembic migration before deploying this login contract.
+
+If `user` is missing, the frontend uses `sub` as a fallback identifier and reads `name`, `role` and `exp` from token claims. `exp` is used only to end the screen session on time; the server must check it too.
 
 ## Customer
 

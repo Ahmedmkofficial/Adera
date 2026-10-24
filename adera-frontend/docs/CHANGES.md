@@ -1,9 +1,17 @@
 # What changed
 
-## Logo, admin sign-in and wording pass
+## Current update: authentication, themes and branding
 
-- **New logo** (three rings and an orange dot): favicon (SVG and PNG), Apple touch icon, installable-app icons and manifest, a reusable `LogoMark` component, shown large on the sign-in and register pages, in the customer top bar and in the analyst sidebar.
-- **Admin sign-in**: the first box now accepts a phone number *or* a username. Username `admin` with password `admin` signs in as the analyst. Sign-in sends `{username, password}`; the user object carries `username` instead of `phone` (see `docs/API_CONTRACT.md`).
+- **Username login**: real-backend staff login now sends the username field supported by the API; customer and legacy staff phone login still send `phone`. Applying the staff-username migration is required before assigning usernames. The built-in `admin` / `admin` credential remains demo-only.
+- **Two visual identities**: customer screens use a reassuring payment-security look; analyst screens use a denser operations-console treatment. Both share responsive layout primitives and color tokens.
+- **Light and dark themes**: the accessible toggle is shared across both interfaces, persists in browser storage, and initializes before app rendering to reduce theme flash.
+- **Fingerprint-shield brand mark**: one reusable SVG mark is used in the application and as the SVG favicon/installable icon.
+- **Motion and accessibility**: route entrance motion is defined centrally and honors reduced-motion preferences.
+- **Tests**: see the current `npm test` output; older counts below describe the earlier design pass.
+
+## Earlier: logo, admin sign-in and wording pass
+
+- Previous logo and demo sign-in behavior are retained here as historical notes.
 - **Prototype wording removed**: the "PROTOTYPE · SYNTHETIC DATA" tag, the sidebar version label, the "demo accounts" block on the sign-in page, and the "Demo ..." account names. A test (`wording.test.jsx`) fails if such wording comes back.
 - The receipt keeps one honest line, "Simulated payment. No money was moved.", because the screen would otherwise say a payment was sent when no money moved.
 - The sign-in and register pages now have a real `h1` heading.

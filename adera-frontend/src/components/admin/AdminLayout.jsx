@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import LogoMark from '../LogoMark'
 import SkipLink from '../SkipLink'
+import ThemeToggle from '../ThemeToggle'
 import { useAuth } from '../../auth/useAuth'
 import '../ui/ui.css'
 import '../risk/risk.css'
@@ -63,6 +64,7 @@ export default function AdminLayout() {
       <div className="op-body">
         <header className="op-top">
           <span className="op-top-title">{sectionOf(pathname)}</span>
+          <ThemeToggle />
         </header>
         <main id="main" tabIndex={-1} className="op-main">
           <Outlet />

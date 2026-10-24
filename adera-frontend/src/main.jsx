@@ -12,14 +12,17 @@ import '@fontsource/noto-sans-ethiopic/ethiopic-400.css'
 import '@fontsource/noto-sans-ethiopic/ethiopic-500.css'
 import App from './App.jsx'
 import AuthProvider from './auth/AuthProvider.jsx'
+import ThemeProvider from './theme/ThemeProvider.jsx'
 import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 )

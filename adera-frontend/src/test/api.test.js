@@ -52,6 +52,36 @@ describe('demo mode (the default)', () => {
 })
 
 describe('real backend mode', () => {
+  it('sends a staff username using the backend username field', async () => {
+    const token = jwt({ sub: '14', role: 'ANALYST', exp: Math.floor(Date.now() / 1000) + 60 })
+    const { api, seen } = await realApi((c) =>
+      reply(c, {
+        access_token: token,
+        token_type: 'bearer',
+        user: { id: 14, phone: '0911111111', username: 'case.agent', name: 'Case Agent', role: 'ANALYST' },
+      }),
+    )
+
+    const session = await api.login('case.agent', 'secret123')
+    expect(JSON.parse(seen[0].data)).toEqual({ username: 'case.agent', password: 'secret123' })
+    expect(session.user).toMatchObject({ username: 'case.agent', role: 'analyst' })
+  })
+
+  it('keeps customer phone sign-in on the backend phone field', async () => {
+    const token = jwt({ sub: '15', role: 'USER', exp: Math.floor(Date.now() / 1000) + 60 })
+    const { api, seen } = await realApi((c) =>
+      reply(c, {
+        access_token: token,
+        token_type: 'bearer',
+        user: { id: 15, phone: '0911111111', name: 'Customer', role: 'USER' },
+      }),
+    )
+
+    const session = await api.login('0911111111', 'secret123')
+    expect(JSON.parse(seen[0].data)).toEqual({ phone: '0911111111', password: 'secret123' })
+    expect(session.user).toMatchObject({ username: '0911111111', role: 'customer' })
+  })
+
   it('sends the risk check to POST /risk/check', async () => {
     const answer = { score: 10, level: 'LOW', recommendation: 'ALLOW', reasons: [] }
     const { api, seen } = await realApi((c) => reply(c, answer))
@@ -237,12 +267,12 @@ describe('real backend mode', () => {
     expect(heard).toHaveBeenCalledTimes(1)
   })
 
-  it('signs in with POST /auth/login using the backend phone field', async () => {
+  it('signs in with POST /auth/login using the backend username field', async () => {
     const token = jwt({ sub: 'admin', name: 'Admin', role: 'analyst' })
     const { api, seen } = await realApi((c) => reply(c, { access_token: token }))
     await api.login('admin', 'secret-pass')
     expect(seen[0].url).toBe('/auth/login')
-    expect(JSON.parse(seen[0].data)).toEqual({ phone: 'admin', password: 'secret-pass' })
+    expect(JSON.parse(seen[0].data)).toEqual({ username: 'admin', password: 'secret-pass' })
   })
 
   it('still accepts a backend that sends "phone" in the user object', async () => {

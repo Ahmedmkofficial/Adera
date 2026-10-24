@@ -1,6 +1,6 @@
 backend/.venv/
-frontend/node_modules/
-frontend/dist/
+adera-frontend/node_modules/
+adera-frontend/dist/
 .local-demo/
 __pycache__/
 *.pyc

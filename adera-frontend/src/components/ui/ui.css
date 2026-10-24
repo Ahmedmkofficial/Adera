@@ -10,14 +10,14 @@
   font-weight: 500;
   transition: transform 160ms var(--ease), opacity 160ms var(--ease), background 160ms var(--ease), color 160ms var(--ease), box-shadow 160ms var(--ease);
 }
-.ad-btn-primary:hover:not(:disabled) { background: #34363a; box-shadow: 0 4px 12px rgba(28, 28, 30, .12); }
-.ad-btn-secondary:hover:not(:disabled) { background: rgba(28, 28, 30, .045); }
+.ad-btn-primary:hover:not(:disabled) { filter: brightness(1.08); box-shadow: var(--shadow-soft); }
+.ad-btn-secondary:hover:not(:disabled) { background: var(--accent-soft); }
 .ad-btn:active { transform: scale(0.985); }
 .ad-btn:focus-visible { outline: 2px solid #426b59; outline-offset: 3px; }
 .ad-btn:disabled { opacity: 0.48; cursor: not-allowed; box-shadow: none; }
 
-.ad-btn-primary { color: #fff; background: var(--ink); }
-.ad-btn-secondary { color: var(--ink); background: transparent; border-color: var(--ink); }
+.ad-btn-primary { color: var(--accent-contrast); background: var(--accent); }
+.ad-btn-secondary { color: var(--ink); background: var(--surface); border-color: var(--border); }
 .ad-btn-tertiary {
   min-height: 38px;
   color: var(--muted);
@@ -39,22 +39,21 @@
 .ad-field-input {
   display: block;
   width: 100%;
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  border-bottom: 1px solid #a8aaa8;
-  border-radius: 0;
+  min-height: 48px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
   outline: none;
   color: var(--ink);
-  background: transparent;
+  background: var(--field);
   font: inherit;
   font-size: 17px;
-  transition: box-shadow 180ms var(--ease);
+  transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease), background 180ms var(--ease);
 }
 .ad-field-input:focus-visible {
   outline: none;
-  border-color: #426b59;
-  box-shadow: 0 1.5px 0 0 #426b59;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 .ad-field-input.mono {
   font-family: "JetBrains Mono", ui-monospace, monospace;
@@ -70,7 +69,7 @@
   gap: 2px;
   padding: 3px;
   border-radius: 999px;
-  background: rgba(28, 28, 30, 0.06);
+  background: var(--accent-soft);
 }
 .ad-seg button {
   min-height: 36px;

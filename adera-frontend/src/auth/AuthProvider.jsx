@@ -21,8 +21,13 @@ export default function AuthProvider({ children }) {
     setNotice(reason ?? null)
   }, [])
 
-  const signIn = useCallback(async (username, password) => {
+  const signIn = useCallback(async (username, password, expectedRole) => {
     const next = await login(username, password)
+    if (expectedRole && next.user.role !== expectedRole) {
+      const error = new Error('This account does not have access to this sign-in page.')
+      error.code = 'ROLE_MISMATCH'
+      throw error
+    }
     saveSession(next)
     setSession(next)
     setNotice(null)

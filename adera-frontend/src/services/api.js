@@ -4,6 +4,7 @@
 // docs/API_CONTRACT.md. Pages never know the difference.
 import { decodeJwtPayload } from '../auth/session'
 import { ROLES } from '../auth/constants'
+import { PHONE_RE } from '../auth/identifier'
 import {
   mockCheckRisk,
   mockCreateCase,
@@ -163,9 +164,12 @@ function toSession(data) {
 }
 
 export async function login(username, password) {
+  const identifier = PHONE_RE.test(username)
+    ? { phone: username }
+    : { username }
   const data = USE_MOCK
     ? await mockLogin(username, password)
-    : await body(http.post('/auth/login', { phone: username, password }))
+    : await body(http.post('/auth/login', { ...identifier, password }))
   return toSession(data)
 }
 
