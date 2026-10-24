@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Synthetic user fraud reports dataset for Adera fraud intelligence testing.",
+  "reports": [
+    {
+      "report_id": "REP-2026-0901",
+      "reporter_phone": "0987654321",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "impersonation",
+      "scam_subtype": "friend_family_impersonation",
+      "amount_etb": 5000,
+      "timestamp": "2026-10-08T14:30:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "HIGH_CONFIDENCE_RISK",
+      "indicators_observed": [
+        "urgent_request",
+        "identity_claim",
+        "new_recipient",
+        "multiple_fraud_reports",
+        "recent_reports"
+      ],
+      "victim_narrative": "Received Telegram message claiming to be my cousin in urgent police custody in Adama. Asked for 5,000 ETB immediately via CBE Birr to phone 0912345678. Found out later cousin was at work.",
+      "evidence_attachment": "screenshot_telegram_msg_0901.png"
+    },
+    {
+      "report_id": "REP-2026-0902",
+      "reporter_phone": "0911223344",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "impersonation",
+      "scam_subtype": "friend_family_impersonation",
+      "amount_etb": 3500,
+      "timestamp": "2026-10-07T09:15:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "HIGH_CONFIDENCE_RISK",
+      "indicators_observed": [
+        "urgent_request",
+        "identity_claim",
+        "recent_reports",
+        "multiple_fraud_reports"
+      ],
+      "victim_narrative": "Attacker called claiming to be my university classmate stranded with medical emergency. Sent 3,500 ETB before realizing account was hijacked.",
+      "evidence_attachment": "call_log_receipt_0902.pdf"
+    },
+    {
+      "report_id": "REP-2026-0903",
+      "reporter_phone": "0922334455",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "impersonation",
+      "scam_subtype": "friend_family_impersonation",
+      "amount_etb": 7000,
+      "timestamp": "2026-10-05T18:45:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "HIGH_CONFIDENCE_RISK",
+      "indicators_observed": [
+        "urgent_request",
+        "identity_claim",
+        "recent_reports",
+        "unusual_payment_amount"
+      ],
+      "victim_narrative": "Posed as my brother on WhatsApp stating he needed urgent bail payment for car collision in Hawassa.",
+      "evidence_attachment": "whatsapp_chat_0903.png"
+    },
+    {
+      "report_id": "REP-2026-0850",
+      "reporter_phone": "0933445566",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "fake_seller",
+      "scam_subtype": "advance_payment_goods",
+      "amount_etb": 12000,
+      "timestamp": "2026-09-20T11:20:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "SUSPICIOUS",
+      "indicators_observed": [
+        "advance_payment_demand",
+        "multiple_fraud_reports",
+        "unusual_payment_amount"
+      ],
+      "victim_narrative": "Telegram electronics store demanded 12,000 ETB deposit for iPhone 14 Pro. Blocked me right after payment.",
+      "evidence_attachment": "telegram_receipt_0850.png"
+    },
+    {
+      "report_id": "REP-2026-0842",
+      "reporter_phone": "0944556677",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "impersonation",
+      "scam_subtype": "employee_boss_impersonation",
+      "amount_etb": 8500,
+      "timestamp": "2026-09-14T16:00:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "SUSPICIOUS",
+      "indicators_observed": [
+        "identity_claim",
+        "urgent_request"
+      ],
+      "victim_narrative": "Posed as my company director requesting payment for office supplies vendor.",
+      "evidence_attachment": "sms_log_0842.png"
+    },
+    {
+      "report_id": "REP-2026-0810",
+      "reporter_phone": "0955667788",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "impersonation",
+      "scam_subtype": "friend_family_impersonation",
+      "amount_etb": 4000,
+      "timestamp": "2026-08-30T10:10:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "SUSPICIOUS",
+      "indicators_observed": [
+        "identity_claim",
+        "urgent_request"
+      ],
+      "victim_narrative": "Claimed to be my aunt needing money for hospital discharge fee.",
+      "evidence_attachment": null
+    },
+    {
+      "report_id": "REP-2026-0790",
+      "reporter_phone": "0966778899",
+      "recipient_phone": "0912345678",
+      "recipient_name": "Abebe Tadesse (Unverified Wallet)",
+      "scam_type": "urgent_payment",
+      "scam_subtype": "emergency_medical_bail",
+      "amount_etb": 6000,
+      "timestamp": "2026-08-15T13:40:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "SUSPICIOUS",
+      "indicators_observed": [
+        "urgent_request"
+      ],
+      "victim_narrative": "Urgent medical money call pretending to be hospital admin.",
+      "evidence_attachment": null
+    },
+    {
+      "report_id": "REP-2026-0501",
+      "reporter_phone": "0977889900",
+      "recipient_phone": "0955112233",
+      "recipient_name": "Kelemu Worku",
+      "scam_type": "fake_seller",
+      "scam_subtype": "advance_payment_goods",
+      "amount_etb": 2500,
+      "timestamp": "2025-11-10T12:00:00Z",
+      "status": "UNVERIFIED",
+      "confidence_level": "REPORTED",
+      "indicators_observed": [
+        "advance_payment_demand"
+      ],
+      "victim_narrative": "Single unverified report from 11 months ago regarding online shoe purchase dispute.",
+      "evidence_attachment": null
+    },
+    {
+      "report_id": "REP-2026-0920",
+      "reporter_phone": "0988990011",
+      "recipient_phone": "0944001122",
+      "recipient_name": "Pyramid Pool Alpha",
+      "scam_type": "investment_scam",
+      "scam_subtype": "ponzi_pyramid",
+      "amount_etb": 25000,
+      "timestamp": "2026-10-04T15:30:00Z",
+      "status": "VERIFIED_SCAM",
+      "confidence_level": "HIGH_CONFIDENCE_RISK",
+      "indicators_observed": [
+        "multiple_fraud_reports",
+        "recent_reports",
+        "suspicious_connections",
+        "previous_scam_cases"
+      ],
+      "victim_narrative": "Invested 25,000 ETB in daily return crypto bot on Telegram. Withdrawals blocked.",
+      "evidence_attachment": "telegram_investment_screenshot.png"
+    }
+  ]
+}

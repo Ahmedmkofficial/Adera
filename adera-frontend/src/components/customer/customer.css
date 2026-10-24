@@ -1,0 +1,351 @@
+.cu-shell {
+  width: 100%;
+  max-width: 520px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-inline: 1px solid var(--border);
+  background:
+    linear-gradient(rgba(31, 161, 180, .035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 161, 180, .035) 1px, transparent 1px),
+    linear-gradient(155deg, var(--surface), var(--paper) 64%);
+  background-size: 32px 32px, 32px 32px, auto;
+  box-shadow: var(--shadow-soft);
+}
+@media (min-width: 500px) {
+  .cu-shell {
+    margin-block: 20px;
+    min-height: calc(100dvh - 40px);
+    border-radius: 24px;
+  }
+}
+
+.cu-topbar {
+  height: 76px;
+  padding: 22px 24px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cu-back {
+  width: 30px;
+  height: 30px;
+  padding: 0 0 2px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 34px;
+  font-weight: 200;
+  line-height: 1;
+  cursor: pointer;
+}
+.cu-back:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.cu-topbar .ad-theme-toggle { margin-left: auto; }
+
+.cu-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 28px max(36px, env(safe-area-inset-bottom));
+  animation: ad-enter 420ms var(--ease) both;
+}
+
+/* Login / Register */
+.cu-wordmark { margin-top: 40px; }
+.cu-wordmark-latin {
+  margin: 0;
+  font-size: 56px;
+  line-height: 0.95;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+}
+.cu-wordmark-ethiopic {
+  margin: 10px 0 0 3px;
+  font-family: "Noto Sans Ethiopic", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.cu-form {
+  margin-top: 38px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+.cu-form .ad-btn-primary { min-height: 52px; }
+.cu-form .ad-btn-tertiary { margin-top: 8px; }
+.cu-fields { display: grid; gap: 24px; margin-bottom: 36px; }
+.cu-error { margin: -16px 0 20px; font-size: 13px; font-weight: 500; }
+.cu-login-content .cu-wordmark {
+  animation: cu-login-reveal 460ms var(--ease) both;
+}
+.cu-login-content .cu-wordmark-mark {
+  transform-origin: center;
+  animation: cu-login-mark 620ms var(--ease) both;
+}
+.cu-login-content .cu-login-form {
+  animation: cu-login-reveal 520ms var(--ease) 60ms both;
+}
+.cu-login-title {
+  margin: 0 0 24px;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+.cu-login-kicker {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .12em;
+}
+.cu-login-staff-link {
+  display: block;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.cu-login-staff-link:hover { color: var(--accent); }
+.cu-login-link { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+@keyframes cu-login-reveal {
+  from { opacity: .72; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes cu-login-mark {
+  from { opacity: .72; transform: scale(.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+.cu-login-logo-animating .cu-wordmark {
+  animation: none;
+}
+.cu-login-logo-animating .cu-wordmark-mark {
+  animation: none;
+}
+.cu-login-logo-animating .ad-login-logo-ridge {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cu-login-logo-draw 780ms ease-out both;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-center {
+  animation-delay: 0ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-core {
+  animation-delay: 180ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-mid {
+  animation-delay: 360ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-outer {
+  animation-delay: 540ms;
+}
+.cu-login-logo-animating .ad-login-logo-ridge-side {
+  animation-delay: 720ms;
+}
+.cu-login-logo-animating .cu-login-form {
+  opacity: 0;
+  animation: cu-login-form-reveal 400ms var(--ease) 1.85s both;
+}
+@keyframes cu-login-logo-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes cu-login-form-reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Send money ---------- */
+.cu-title {
+  margin: 26px 0 0; font-size: 34px; line-height: 1;
+  font-weight: 600; letter-spacing: -0.025em;
+}
+.cu-send-form { flex: 1; display: flex; flex-direction: column; }
+.cu-amount {
+  margin: 64px 0 56px; padding-bottom: 14px; text-align: center;
+  border-bottom: 0.5px solid var(--border);
+  transition: border-color 180ms var(--ease);
+}
+.cu-amount:focus-within {
+  border-bottom-color: #426b59;
+  box-shadow: 0 1px 0 #426b59;
+}
+.cu-amount-input {
+  width: 100%; padding: 0; border: 0; outline: none; background: transparent;
+  color: var(--ink); text-align: center; font: inherit;
+  font-size: clamp(64px, 22vw, 96px); font-weight: 200; line-height: 1; letter-spacing: -0.055em;
+}
+.cu-amount-input.is-md { font-size: 72px; }
+.cu-amount-input.is-sm { font-size: 56px; }
+.cu-amount-input:focus-visible { outline: none; }
+.cu-amount-input::placeholder { color: var(--border); }
+.cu-currency { margin-top: 14px; color: var(--muted); font-size: 15px; letter-spacing: 0.06em; }
+.cu-notice { margin: 20px 0 0; color: var(--muted); font-size: 14px; line-height: 20px; }
+.cu-send-form .cu-error { margin: 16px 0 0; }
+.cu-bottom { margin-top: auto; padding-top: 32px; }
+
+/* ---------- Report ---------- */
+.cu-report-form { flex: 1; display: flex; flex-direction: column; margin-top: 28px; }
+.cu-report-form .cu-error { margin: 0 0 20px; }
+
+.cu-types { margin: 0; padding: 0; border: 0; min-width: 0; }
+.cu-types .ad-field-label { padding: 0; margin-bottom: 4px; }
+.cu-type {
+  position: relative;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 17px;
+  cursor: pointer;
+}
+.cu-type input { position: absolute; opacity: 0; pointer-events: none; }
+.cu-type:focus-within { outline: 2px solid var(--ink); outline-offset: 2px; }
+.cu-type-node {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 180ms var(--ease), transform 180ms var(--ease);
+}
+.cu-type:hover .cu-type-node { transform: scale(1.15); }
+.cu-type.is-on { font-weight: 600; }
+.cu-type.is-on .cu-type-node { background: var(--ink); transform: scale(1.3); }
+
+.cu-textarea {
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 0.5px solid var(--ink);
+  border-radius: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+  line-height: 24px;
+  transition: box-shadow 180ms var(--ease);
+}
+.cu-textarea:focus-visible {
+  outline: none;
+  border-color: #426b59;
+  box-shadow: 0 1.5px 0 0 #426b59;
+}
+.cu-count {
+  margin-top: 6px;
+  text-align: right;
+  color: var(--muted);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+}
+
+/* ---------- Confirmation ---------- */
+.cu-confirm { padding-top: 12dvh; }
+.cu-confirm-icon { width: 64px; height: 64px; margin-left: -8px; }
+.cu-confirm-icon path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: cu-draw 520ms var(--ease) 120ms forwards;
+}
+@keyframes cu-draw { to { stroke-dashoffset: 0; } }
+.cu-confirm-title {
+  margin: 28px 0 0;
+  font-size: 34px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  outline: none;
+}
+.cu-confirm-body { margin: 12px 0 0; color: var(--muted); font-size: 17px; line-height: 24px; }
+.cu-summary { margin: 36px 0 0; border-top: 0.5px solid var(--border); }
+.cu-summary div {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 15px;
+}
+.cu-summary dt { color: var(--muted); }
+.cu-summary dd { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cu-confirm-icon path { animation: none; stroke-dashoffset: 0; }
+}
+
+@media (max-width: 360px) {
+  .cu-topbar { padding-inline: 18px; }
+  .cu-content { padding-inline: 20px; }
+  .cu-wordmark-latin { font-size: 48px; }
+  .cu-title { font-size: 30px; }
+  .cu-amount { margin: 48px 0 40px; }
+  .cu-form { padding: 18px; }
+}
+/* ---------- Auth extras ---------- */
+.cu-content:focus { outline: none; }
+.cu-notice-top { margin: 0 0 24px; }
+.cu-link-btn { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+
+
+.cu-titlebar {
+  margin-top: 26px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.cu-titlebar .cu-title { margin: 0; }
+.cu-signout {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.cu-signout:hover { color: var(--ink); text-decoration: underline; }
+.cu-signout:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+.cu-risk-word { color: var(--lvl-text, var(--lvl)); font-weight: 600; }
+
+/* the logo above the sign-in wordmark */
+.cu-wordmark-mark { display: block; margin-bottom: 22px; }
+.cu-wordmark-mark { color: var(--accent); }
+.cu-wordmark-latin { color: var(--ink); font-weight: 500; letter-spacing: -.055em; }
+.cu-wordmark-ethiopic { color: var(--accent); }
+
+.cu-title { color: var(--ink); }
+.cu-amount {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 16px 17px;
+  background: var(--surface);
+  box-shadow: 0 10px 28px rgba(18, 91, 111, .06);
+}
+.cu-amount:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 10px 28px rgba(18, 91, 111, .06);
+}
+.cu-type { border-bottom-color: var(--border); }
+.cu-type.is-on .cu-type-node { background: var(--accent); }
+.cu-textarea { border: 1px solid var(--border); border-radius: 11px; padding: 12px; background: var(--field); }
+.cu-textarea:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.cu-confirm-icon path { stroke: var(--accent); }
+
+@media (max-width: 499px) {
+  .cu-shell { border-inline: 0; }
+}

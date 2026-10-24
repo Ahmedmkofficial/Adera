@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "indicators": [
+    {
+      "id": "urgent_request",
+      "name": "Urgent Payment / High-Pressure Demand",
+      "category": "BEHAVIORAL",
+      "default_risk_weight": 15,
+      "evidence_strength": "WEAK",
+      "confidence_impact": "LOW",
+      "description": "Payment requested with extreme urgency or strict time constraints (e.g., 'send within 5 minutes').",
+      "eval_rule": "Flagged if communication or transaction note contains urgency keywords or high velocity demand."
+    },
+    {
+      "id": "identity_claim",
+      "name": "Unverified Identity Claim",
+      "category": "BEHAVIORAL",
+      "default_risk_weight": 15,
+      "evidence_strength": "WEAK",
+      "confidence_impact": "LOW",
+      "description": "Recipient claims to be a relative, executive, bank official, or government entity without secondary verification.",
+      "eval_rule": "Flagged when sender notes or reports indicate an identity assertion not backed by verified account credentials."
+    },
+    {
+      "id": "new_recipient",
+      "name": "First-Time Recipient Account",
+      "category": "HISTORICAL",
+      "default_risk_weight": 10,
+      "evidence_strength": "WEAK",
+      "confidence_impact": "LOW",
+      "description": "The sender has never transferred money to this recipient phone number before.",
+      "eval_rule": "Flagged if transaction history between sender and recipient is 0."
+    },
+    {
+      "id": "unusual_payment_amount",
+      "name": "Unusual Payment Amount",
+      "category": "TRANSACTIONAL",
+      "default_risk_weight": 10,
+      "evidence_strength": "WEAK",
+      "confidence_impact": "LOW",
+      "description": "Transaction amount is significantly higher than sender's average transfer or exceeds typical P2P thresholds.",
+      "eval_rule": "Flagged if amount > 3x average user transaction or > 5,000 ETB for new recipient."
+    },
+    {
+      "id": "multiple_fraud_reports",
+      "name": "Multiple Fraud Reports",
+      "category": "REPORTS",
+      "default_risk_weight": 25,
+      "evidence_strength": "STRONG",
+      "confidence_impact": "HIGH",
+      "description": "Recipient phone number has accumulated 3 or more independent user fraud reports.",
+      "eval_rule": "Flagged if total_fraud_reports >= 3."
+    },
+    {
+      "id": "recent_reports",
+      "name": "Recent Fraud Report Activity",
+      "category": "REPORTS",
+      "default_risk_weight": 20,
+      "evidence_strength": "STRONG",
+      "confidence_impact": "HIGH",
+      "description": "Recipient received new fraud reports within the last 7 to 14 days, indicating an active ongoing campaign.",
+      "eval_rule": "Flagged if recent_reports_7days >= 2."
+    },
+    {
+      "id": "suspicious_connections",
+      "name": "Connected to Flagged Accounts / Graph Cluster",
+      "category": "GRAPH_RELATIONSHIP",
+      "default_risk_weight": 15,
+      "evidence_strength": "STRONG",
+      "confidence_impact": "MEDIUM",
+      "description": "Recipient shares linked bank accounts, device IDs, or rapid money transfers with known fraudulent entities.",
+      "eval_rule": "Flagged if recipient relationship graph connects to flagged nodes within 2 hops."
+    },
+    {
+      "id": "previous_scam_cases",
+      "name": "Linked to Previous Scam Cases",
+      "category": "HISTORICAL",
+      "default_risk_weight": 15,
+      "evidence_strength": "STRONG",
+      "confidence_impact": "HIGH",
+      "description": "Recipient has been formally implicated in an investigated fraud case or intelligence record.",
+      "eval_rule": "Flagged if count of linked scam_cases >= 1."
+    },
+    {
+      "id": "advance_payment_demand",
+      "name": "Advance Payment Demand for Goods",
+      "category": "BEHAVIORAL",
+      "default_risk_weight": 15,
+      "evidence_strength": "WEAK",
+      "confidence_impact": "LOW",
+      "description": "Seller requires 100% or partial mobile payment before meeting or sending delivery.",
+      "eval_rule": "Flagged when payment is classified under e-commerce or fake seller reporting."
+    },
+    {
+      "id": "otp_solicitation",
+      "name": "OTP / PIN Solicitation Attempt",
+      "category": "SECURITY",
+      "default_risk_weight": 30,
+      "evidence_strength": "CRITICAL",
+      "confidence_impact": "CRITICAL",
+      "description": "Recipient or associated channel explicitly requested the victim's SMS OTP, PIN, or verification code.",
+      "eval_rule": "Flagged if report indicates OTP/PIN was solicited."
+    },
+    {
+      "id": "fake_sms_notification",
+      "name": "Fake Credit Notification Precursor",
+      "category": "SECURITY",
+      "default_risk_weight": 25,
+      "evidence_strength": "STRONG",
+      "confidence_impact": "HIGH",
+      "description": "Recipient engaged in fake SMS credit notification followed by immediate phone call requesting a refund.",
+      "eval_rule": "Flagged if victim reported spoofed SMS credit message."
+    },
+    {
+      "id": "newly_created_account",
+      "name": "Newly Created Payment Account (<30 days)",
+      "category": "ACCOUNT_PROFILE",
+      "default_risk_weight": 10,
+      "evidence_strength": "WEAK",
+      "confidence_impact": "LOW",
+      "description": "Payment wallet or bank account was registered very recently, typical of throwaway scam accounts.",
+      "eval_rule": "Flagged if account_age_days < 30."
+    }
+  ]
+}

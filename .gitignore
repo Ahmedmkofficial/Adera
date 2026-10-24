@@ -1,0 +1,7 @@
+backend/.venv/
+adera-frontend/node_modules/
+adera-frontend/dist/
+.local-demo/
+__pycache__/
+*.pyc
+.env
