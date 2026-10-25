@@ -6,6 +6,8 @@ Adera is an Ethiopia-focused fraud-intelligence and investigation platform desig
 
 The project demonstrates how fraud reports, suspicious indicators, entity relationships, and explainable risk assessments can help analysts prioritize potential threats and make informed investigation decisions.
 
+Adera can be integrated with cryptocurrency exchanges, travel and accommodation booking platforms, rental platforms, e-commerce websites, and online marketplaces. More broadly, Adera can be integrated into digital payment solutions and digital wallets to enhance transaction security through risk assessment, risk scoring, and explainable warnings for each transaction and recipient. By identifying potential threats in advance and providing actionable insights to guide users' decisions, Adera mitigates the likelihood of financial losses.
+
 **Adera is a prototype that uses synthetic demonstration data. It is not connected to real banking systems or live financial accounts.**
 
 ## Key Features
