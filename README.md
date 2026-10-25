@@ -31,14 +31,19 @@ The video demonstrates the project's purpose, main features, and investigation w
 
 Replace the placeholders below with each member's complete name and verified CTC ID.
 
-| No. | Full Name | CTC ID | Contribution |
+No. | Full Name | CTC ID | Contribution |
 
-| 1 | Ahmed Hussen | CTC-1509-26 | Backend development and integration |
-| 2 | Yoseph Tigiste | CTC-3518-26 | Backend development, integration, and security |
-| 3 | Biruk Abebe | CTC-3679-26 | Threat intelligence |
-| 4 | Eyosias Kassu | CTC-2912-26 | Risk engine |
-| 5 | Reyyan Tesfaye | CTC-2755-26 | Database |
-| 6 | Yohannes Getachew | CTC-3518-26 | Frontend development |
+1. Ahmed Hussen | CTC-1509-26 | Backend development and integration
+
+2. Yoseph Tigiste | CTC-3518-26 | Backend development, integration, and security
+
+3. Biruk Abebe | CTC-3679-26 | Threat intelligence
+
+4. Eyosias Kassu | CTC-2912-26 | Risk engine
+
+5. Reyyan Tesfaye | CTC-2755-26 | Database
+
+6. Yohannes Getachew | CTC-3518-26 | Frontend development
 
 ## Disclaimer
 
