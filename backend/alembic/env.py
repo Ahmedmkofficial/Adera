@@ -1,6 +1,8 @@
 from logging.config import fileConfig
 import os
 
+from dotenv import load_dotenv
+
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -11,6 +13,8 @@ from backend.models import *
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+load_dotenv()
 
 # Keep alembic.ini's existing default intact, but let an explicit environment
 # URL select an isolated database for migrations and verification.

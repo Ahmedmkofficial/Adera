@@ -25,6 +25,11 @@ Adera can be integrated with cryptocurrency exchanges, travel and accommodation 
 
 The video demonstrates the project's purpose, main features, and investigation workflow.
 
+## Quick Start & Local Setup
+
+- **Development Setup Guide:** See [docs/development-setup.md](docs/development-setup.md) for automated dependency installation (`scripts/setup.sh` / `scripts/setup.ps1`), database setup with Docker Compose, and running backend and frontend services on Linux, macOS, or Windows.
+- **Standalone Local Demo:** See [docs/local-demo.md](docs/local-demo.md) to explore the full analyst workflow immediately using an isolated, zero-PostgreSQL SQLite mock environment.
+
 ## GitHub Repository
 
 [View the Adera source code](https://github.com/Ahmedmkofficial/adera)

@@ -25,7 +25,7 @@ The command intentionally fails safely if `adera_dev_clean` already exists; do
 not replace it with a drop/reset command.
 
 ```sh
-cd ~/Projects/adera
+# From the repository root:
 set -a
 . ./.env
 set +a
@@ -37,13 +37,13 @@ The following command applies the migration chain to `adera_dev_clean` only. The
 environment URL takes precedence over the unchanged URL in `alembic.ini`:
 
 ```sh
-DATABASE_URL="$CLEAN_DATABASE_URL" backend/.venv/bin/alembic -c alembic.ini upgrade head
+DATABASE_URL="$CLEAN_DATABASE_URL" .venv/bin/alembic -c alembic.ini upgrade head
 ```
 
 Confirm the recorded revision:
 
 ```sh
-DATABASE_URL="$CLEAN_DATABASE_URL" backend/.venv/bin/alembic -c alembic.ini current
+DATABASE_URL="$CLEAN_DATABASE_URL" .venv/bin/alembic -c alembic.ini current
 ```
 
 ## Application startup and schema smoke check
@@ -52,7 +52,7 @@ This imports the FastAPI application, opens a connection using the clean URL,
 and confirms all eight model tables exist. It does not create or alter schema:
 
 ```sh
-DATABASE_URL="$CLEAN_DATABASE_URL" backend/.venv/bin/python -c 'from sqlalchemy import inspect; from backend.database.session import engine; from backend.main import app; expected={"users", "payment_accounts", "fraud_reports", "transactions", "risk_assessments", "alerts", "scam_cases", "account_relationships"}; actual=set(inspect(engine).get_table_names()); assert expected <= actual, f"Missing tables: {expected - actual}"; print(f"{app.title} startup ok; migrated tables: {len(actual)}")'
+DATABASE_URL="$CLEAN_DATABASE_URL" .venv/bin/python -c 'from sqlalchemy import inspect; from backend.database.session import engine; from backend.main import app; expected={"users", "payment_accounts", "fraud_reports", "transactions", "risk_assessments", "alerts", "scam_cases", "account_relationships"}; actual=set(inspect(engine).get_table_names()); assert expected <= actual, f"Missing tables: {expected - actual}"; print(f"{app.title} startup ok; migrated tables: {len(actual)}")'
 ```
 
 ## Automated tests
@@ -61,7 +61,7 @@ Run application tests with an isolated in-memory SQLite URL so the test modules'
 existing `drop_all` setup cannot point at a PostgreSQL database:
 
 ```sh
-DATABASE_URL=sqlite:// backend/.venv/bin/pytest -q
+DATABASE_URL=sqlite:// .venv/bin/pytest -q
 ```
 
 `backend/tests/test_migrations.py` renders the full PostgreSQL migration chain

@@ -9,8 +9,14 @@ network or use this setup for real users.
 
 From the repository root, run:
 
+### Linux / macOS
 ```sh
-backend/.venv/bin/python scripts/init_local_demo.py
+.venv/bin/python scripts/init_local_demo.py
+```
+
+### Windows (PowerShell)
+```powershell
+.\.venv\Scripts\python.exe scripts\init_local_demo.py
 ```
 
 The initializer refuses to replace an existing `.local-demo/adera-demo.sqlite3`
@@ -28,11 +34,18 @@ fresh local copy/path rather than deleting or overwriting it.
 
 In terminal 1, from the repository root:
 
+### Linux / macOS
 ```sh
 set -a
 . .local-demo/demo.env
 set +a
-backend/.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port 8000
+.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port 8000
+```
+
+### Windows (PowerShell)
+```powershell
+Get-Content .local-demo\demo.env | Where-Object { $_ -match '^([^=]+)=(.*)$' } | ForEach-Object { [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2]) }
+.\.venv\Scripts\uvicorn.exe backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 ## Start the React frontend
@@ -61,8 +74,14 @@ alerts in this demo database.
 From the repository root, run this command to add synthetic dashboard scenarios
 to the existing isolated database:
 
+### Linux / macOS
 ```sh
-backend/.venv/bin/python scripts/expand_local_demo.py
+.venv/bin/python scripts/expand_local_demo.py
+```
+
+### Windows (PowerShell)
+```powershell
+.\.venv\Scripts\python.exe scripts\expand_local_demo.py
 ```
 
 The expansion is idempotent: rerunning it preserves existing rows and adds no
