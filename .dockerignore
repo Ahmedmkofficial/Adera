@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+.env.*
+.venv/
+backend/.venv/
+**/__pycache__/
+**/*.pyc
+.pytest_cache/
+.local-demo/
+docs/
+tests/
+adera-frontend/
+*.md

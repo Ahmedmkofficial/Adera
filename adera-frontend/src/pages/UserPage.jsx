@@ -36,8 +36,18 @@ export default function UserPage() {
     setNotice('')
     try {
       setResult(await checkRisk(phone, amount))
-    } catch {
-      setError('Could not check this recipient. Please try again.')
+    } catch (err) {
+      const detail = err?.response?.data?.detail
+      const status = err?.response?.status
+      if (status === 404 && detail === 'Recipient not found') {
+        setError('Recipient phone number was not found on the network.')
+      } else if (status === 404 && detail === 'Recipient account not found') {
+        setError('Recipient has no active payment account.')
+      } else if (status === 429) {
+        setError('Too many risk checks requested. Please wait a moment and try again.')
+      } else {
+        setError('Could not check this recipient. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
